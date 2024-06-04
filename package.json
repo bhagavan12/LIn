@@ -6,23 +6,22 @@
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@mui/material": "^5.2.8",
-    "firebase": "^10.9.0",
-    "mdb-react-ui-kit": "^7.2.0",
-    "mdbreact": "^5.2.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "firebase": "^10.9.0",
+    "mdb-react-ui-kit": "^7.2.0",
+    "mdbreact": "^5.2.0",
     "react": "^18.3.1",
+    "react-bootstrap": "^2.10.2",
     "react-dom": "^18.3.1",
     "react-google-button": "^0.7.2",
     "react-google-charts": "^4.0.1",
     "react-player": "^2.15.1",
     "react-router-dom": "^6.22.3",
-    "react-bootstrap": "^2.10.2",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
-
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -46,5 +45,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "stylelint": "^16.6.1",
+    "stylelint-config-standard": "^36.0.0"
   }
 }
