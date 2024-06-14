@@ -286,7 +286,7 @@
 
 // export default MyNavbar;
 import React, { useState } from 'react';
-import './Navbar1.css';
+import './Navbar2.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUserAuth } from '../../context/UserAuthContext';
 import Search from '../Search/Search';
@@ -404,6 +404,13 @@ const MyNavbar = () => {
                     )}
                 </div>
             </div>
+            {/* {showSearch && (
+                <div className="search-bar-overlay">
+                    <div className="search-container">
+                        <Search />
+                    </div>
+                </div>
+            )} */}
         </nav>
     );
 };
