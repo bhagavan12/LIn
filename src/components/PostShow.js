@@ -296,7 +296,9 @@ const PostList = () => {
                 querySnapshot.forEach((doc) => {
                     fetchedPosts.push({ id: doc.id, ...doc.data() });
                 });
-                setPosts(fetchedPosts);
+                const sortedPosts = fetchedPosts.sort((a, b) => b.createdAt - a.createdAt);
+
+                setPosts(sortedPosts);
             } catch (error) {
                 console.error("Error fetching posts:", error);
             }
@@ -382,8 +384,8 @@ const PostList = () => {
                 <Modal.Body >
                     {modalPost && (
                         <div>
-                            {/* <p>Date: {new Date(modalPost.timestamp?.seconds * 1000).toLocaleString()}</p> */}
-                            <p>Date: {formatDate(modalPost.timestamp)}</p>
+                            <p>Date: {(new Date(modalPost.createdAt.seconds * 1000)).toLocaleString()}</p>
+                            {/* <p>Date: {formatDate(modalPost.timestamp)}</p> */}
                             {/* Display images in a Bootstrap Carousel */}
                             <Carousel activeIndex={index} onSelect={handleSelect}>
                                 {modalPost.imageuploaded.map((mediaUrl, idx) => (

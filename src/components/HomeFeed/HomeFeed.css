@@ -1,0 +1,67 @@
+   .postcard {
+    border-radius: 10px;
+    margin: 20px auto;
+    box-shadow: 3px 1px 10px 0.5px rgba(43, 42, 42, 0.145);
+    width: 580px;
+    padding: 20px;
+    background-color: white;
+  }
+  
+  .postcard .post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .postcard #uname {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 1.5rem;
+    margin-left: 10px;
+  }
+  
+  .imgbox {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    width: 100%;
+  }
+  
+  .imgbox img {
+    width: 100%;
+    height: auto;
+    max-width: 560px;
+    border-radius: 10px;
+  }
+  
+  .slick-slider {
+    margin-bottom: 20px;
+  }
+  
+  .slick-prev, .slick-next {
+    z-index: 1;
+  }
+  
+  .slick-dots li button:before {
+    font-size: 12px;
+  }
+  
+  /* Media queries for phone view */
+  @media (max-width: 600px) {
+    .postcard {
+      width: 90%;
+      padding: 10px;
+    }
+  
+    .postcard #uname {
+      font-size: 1.2rem;
+    }
+  
+    .imgbox img {
+      max-width: 100%;
+    }
+  
+    .slick-prev, .slick-next {
+      display: none;
+    }
+  }
+  

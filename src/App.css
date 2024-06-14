@@ -25,3 +25,9 @@
     height: 38px !important;
   }
    */
+
+
+   .main-content {
+    padding-top: 60px; /* Ensure this matches the height of your navbar */
+  }
+  

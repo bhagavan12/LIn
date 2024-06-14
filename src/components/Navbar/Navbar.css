@@ -1,0 +1,213 @@
+/* Navbar.css */
+
+/* General styles */
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    height: 100%;
+    width: 250px; /* Adjust as needed */
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #17a2b8; /* Adjust color as per your design */
+    overflow-x: hidden;
+    padding-top: 20px;
+    transition: all 0.3s;
+  }
+  
+  .sidebar a {
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    color: white;
+    display: block;
+  }
+  
+  .sidebar a:hover {
+    opacity: 0.8;
+  }
+  
+  .sidebar .brand {
+    padding: 10px 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Main content */
+  .main-content {
+    margin-left: 250px; /* Adjust to match sidebar width */
+    padding: 20px;
+    background-color: #f1f1f1; /* Adjust background color as needed */
+    transition: margin-left 0.3s;
+  }
+  
+  /* Toggle button */
+  .toggle-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    z-index: 999;
+    display: none; /* Initially hidden on larger screens */
+  }
+  
+  .toggle-btn:hover {
+    opacity: 0.8;
+  }
+  
+  /* Icons */
+  .sidebar a i {
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+    background-repeat: no-repeat;
+    background-size: 80% 80%;
+  }
+  
+  /* Specific Icon Styles */
+  .material-symbols--home {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFFFFF' d='M4 21V9l8-6l8 6v12h-6v-7h-4v7z'/%3E%3C/svg%3E");
+  }
+  
+  .ph--plus-fill {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath fill='%23FFFFFF' d='M208 32H48a16 16 0 0 0-16 16v160a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16m-24 104h-48v48a8 8 0 0 1-16 0v-48H72a8 8 0 0 1 0-16h48V72a8 8 0 0 1 16 0v48h48a8 8 0 0 1 0 16'/%3E%3C/svg%3E");
+  }
+  
+  .fe--messanger {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFFFFF' fill-rule='evenodd' d='m12.942 14.413l-2.56-2.66L5.45 14.48l5.406-5.736l2.56 2.66l4.93-2.727zM11.899 2C6.432 2 2 6.144 2 11.257c0 2.908 1.434 5.503 3.678 7.2V22l3.378-1.874c.9.252 1.855.388 2.843.388c5.468 0 9.9-4.145 9.9-9.257c0-5.113-4.432-9.257-9.9-9.257'/%3E%3C/svg%3E");
+  }
+  
+  .mage--video-player-fill {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFFFFF' d='M21.706 6.259h-4.328V2.212a6.14 6.14 0 0 1 4.328 4.047M6.65 2.212v4.047H2.275A6.13 6.13 0 0 1 6.65 2.212M15.613 2H8.415v4.259h7.198zM22 8.024H2.004a.671.671 0 0 0 0 .152v7.647A6.177 6.177 0 0 0 8.156 22h7.645a6.186 6.186 0 0 0 6.176-6.177V8.176A.67.67 0 0 0 22 8.024m-6.328 7.14a1.39 1.39 0 0 1-.376.448l-3.53 2.47a1.257 1.257 0 0 1-.634.224h-.118a1.27 1.27 0 0 1-1.059-.541c-.13-.195-.2-.425-.2-.66v-4.61c-.001-.23.064-.455.189-.648c.13-.177.299-.322.494-.423c.2-.09.416-.135.635-.13c.211.01.417.07.6.177L15.2 13.6a1.177 1.177 0 0 1 .589.976c.016.204-.025.407-.118.589'/%3E%3C/svg%3E");
+  }
+  
+  .mdi--view-dashboard {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFFFFF' d='M13 3v6h8V3m-8 18h8V11h-8M3 21h8v-6H3m0-2h8V3H3z'/%3E%3C/svg%3E");
+  }
+  
+  /* Profile image */
+  .navbar-auth img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+  }
+  
+  /* Logout button */
+  .navbar-auth button {
+    background-color: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    text-decoration: underline;
+  }
+  
+  .navbar-auth button:hover {
+    opacity: 0.8;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+      margin-bottom: 10px;
+    }
+    
+    .main-content {
+      margin-left: 0;
+      padding: 20px;
+    }
+    
+    .toggle-btn {
+      display: block;
+    }
+    
+    .sidebar a {
+      padding: 10px 20px;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+    
+    .sidebar .brand {
+      font-size: 1.2rem;
+    }
+  }
+
+
+  /* Navbar.css */
+
+/* ... Existing styles ... */
+
+/* Search icon */
+.toggle-search-btn {
+    position: absolute;
+    top: 10px;
+    right: 60px; /* Adjust position as needed */
+    font-size: 1.5rem;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    z-index: 999;
+  }
+  
+  .toggle-search-btn:hover {
+    opacity: 0.8;
+  }
+  
+  /* Search container */
+  .search-container {
+    position: absolute;
+    top: 10px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    width: 300px; /* Adjust width as needed */
+    transition: all 0.3s ease;
+  }
+  
+  .search-container input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .search-container input[type="text"]:focus {
+    outline: none;
+    border-color: #17a2b8; /* Adjust focus color as needed */
+    box-shadow: 0 0 5px #17a2b8; /* Adjust focus shadow as needed */
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .toggle-search-btn {
+      display: none; /* Hide search icon on smaller screens */
+    }
+    
+    .search-container {
+      position: relative;
+      width: auto;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      right: 0;
+    }
+  }
+  
+  

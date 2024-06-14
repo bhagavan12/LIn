@@ -389,7 +389,7 @@ import React, { useState } from "react";
 import { useUserAuth } from "../context/UserAuthContext";
 import { storage, db } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 
 const PostForm = () => {
   const { userDataf } = useUserAuth();
@@ -452,7 +452,7 @@ const PostForm = () => {
         imageuploaded: uploadedUrls,
         likes: 0,
         caption,
-        createdAt: new Date()
+        createdAt: Timestamp.now()
       });
 
       // Reset form state after successful submission
