@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { collection, query, where, getDocs, orderBy,updateDoc,doc } from 'firebase/firestore';
 import { ref, getDownloadURL, listAll ,getMetadata} from "firebase/storage";
 import { storage, db } from "../../firebase";
 import { useUserAuth } from "../../context/UserAuthContext";
@@ -89,6 +89,54 @@ const FriendsPosts = () => {
     }
   };
 
+  // const handleLikeToggle = async (post) => {
+  //   const postRef = doc(db, 'posts', post.id);
+  //   const updatedLikedBy = post.likedBy || [];
+
+  //   if (updatedLikedBy.includes(user.uid)) {
+  //     updatedLikedBy.splice(updatedLikedBy.indexOf(user.uid), 1);
+  //     await updateDoc(postRef, {
+  //       likes: post.likes - 1,
+  //       likedBy: updatedLikedBy
+  //     });
+  //     post.likes -= 1;
+  //   } else {
+  //     updatedLikedBy.push(user.uid);
+  //     await updateDoc(postRef, {
+  //       likes: post.likes + 1,
+  //       likedBy: updatedLikedBy
+  //     });
+  //     post.likes += 1;
+  //   }
+
+  //   setFriendsPosts((prevPosts) =>
+  //     prevPosts.map((p) => (p.id === post.id ? { ...p, likes: post.likes, likedBy: updatedLikedBy } : p))
+  //   );
+  // };
+   const handleLikeToggle = async (post) => {
+    const postRef = doc(db, 'posts', post.id);
+    const updatedLikedBy = post.likedBy || [];
+
+    if (updatedLikedBy.includes(user.uid)) {
+      updatedLikedBy.splice(updatedLikedBy.indexOf(user.uid), 1);
+      await updateDoc(postRef, {
+        likes: post.likes - 1,
+        likedBy: updatedLikedBy
+      });
+      post.likes -= 1;
+    } else {
+      updatedLikedBy.push(user.uid);
+      await updateDoc(postRef, {
+        likes: post.likes + 1,
+        likedBy: updatedLikedBy
+      });
+      post.likes += 1;
+    }
+
+    setFriendsPosts((prevPosts) =>
+      prevPosts.map((p) => (p.id === post.id ? { ...p, likes: post.likes, likedBy: updatedLikedBy } : p))
+    );
+  };
   // Settings for react-slick carousel
   const sliderSettings = {
     dots: true,
@@ -97,22 +145,43 @@ const FriendsPosts = () => {
     slidesToShow: 1,
     slidesToScroll: 1
   };
+  const formatTimeDifference = (timestamp) => {
+    const now = Date.now();
+    const diff = now - timestamp * 1000; // Convert seconds to milliseconds
+
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const months = Math.floor(days / 30);
+    const years = Math.floor(months / 12);
+
+    if (years > 0) return `${years} year${years > 1 ? 's' : ''} ago`;
+    if (months > 0) return `${months} month${months > 1 ? 's' : ''} ago`;
+    if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
+    if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
+  };
 
   return (
     <>
 
     {/* <Navbar/> */}
-    <div>
-      <h2>Friends' Posts</h2>
+    <div className='centrr'>
+      {/* <h2>Friends' Posts</h2> */}
       <div>
         {friendsPosts.length > 0 ? (
           friendsPosts.map(post => (
             <div className='postcard' key={post.id}>
               <div className="post-header">
                 <img src={post.profileImageUrl} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
-                <h3 id="uname">{post.username}</h3>
+                <div>
+                  <h3 id="uname">{post.username}</h3>
+                  <h6 style={{paddingLeft:"12px"}} id=''>{formatTimeDifference(post.createdAt.seconds)}</h6>
+                  {/* <h6 id="uname">{new Date(post.createdAt.seconds * 1000).toLocaleString()}</h6> */}
+                </div>
               </div>
-              <p>{new Date(post.createdAt.seconds * 1000).toLocaleString()}</p>
               {post.imageuploaded.length > 1 ? (
                 <Slider {...sliderSettings}>
                   {post.imageuploaded.map((image, index) => (
@@ -128,54 +197,57 @@ const FriendsPosts = () => {
                   </div>
                 ))
               )}
-              <p>Likes: {post.likes}</p>
-              <p>{post.caption}</p>
+              {/* <div className="like-section">
+                <span
+                  className={`like-button ${post.likedBy && post.likedBy.includes(user.uid) ? 'liked' : ''}`}
+                  onClick={() => handleLikeToggle(post)}
+                >
+                  <i className={post.likedBy && post.likedBy.includes(user.uid) ? 'flat-color-icons--like' : 'icon-park-outline--like'}></i>
+                </span>
+              </div> */}
+              <div className="like-section">
+                <span
+                  className={`like-button ${post.likedBy && post.likedBy.includes(user.uid) ? 'liked' : ''}`}
+                  onClick={() => handleLikeToggle(post)}
+                >
+                  <i className={post.likedBy && post.likedBy.includes(user.uid) ? 'flat-color-icons--like' : 'icon-park-outline--like'}></i>
+                </span>
+                <span className="comment-icon">
+                  <i className="iconamoon--comment-thin"></i>
+                </span>
+              </div>
+              <p>{post.likes} Likes</p>
+              <p><span id='uname1'>{post.username}</span> {post.caption}</p>
             </div>
           ))
         ) : (
-          <p>No posts from friends.</p>
+          <div className='centrr'>
+            <div class="loader">
+              <div class="wrapper">
+                <div class="circle"></div>
+                <div class="line-1"></div>
+                <div class="line-2"></div>
+                <div class="line-3"></div>
+                <div class="line-4"></div>
+              </div>
+            </div>
+            <div class="loader">
+              <div class="wrapper">
+                <div class="circle"></div>
+                <div class="line-1"></div>
+                <div class="line-2"></div>
+                <div class="line-3"></div>
+                <div class="line-4"></div>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>
     </>
   );
 };
-//     <div>
-//       <h2>Friends' Posts</h2>
-//       <div>
-//         <h3>Friends UIDs: {friendsUIDs.join(', ')}</h3>
-//         {friendsPosts.length > 0 ? (
-//           friendsPosts.map(post => (
-//             <div className='postcard' key={post.id}>
-//               <h3 id="uname">{post.username}</h3>
-//               <img src={post.profileImageUrl} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
-//               <p>{post.caption}</p>
-//               <p>{new Date(post.createdAt.seconds * 1000).toLocaleString()}</p>
-//               {post.imageuploaded.length > 1 ? (
-//                 <Slider {...sliderSettings}>
-//                   {post.imageuploaded.map((image, index) => (
-//                     <div className='imgbox' key={index}>
-//                       <img src={image} alt={`Image ${index}`} style={{ width: '100%' }} />
-//                     </div>
-//                   ))}
-//                 </Slider>
-//               ) : (
-//                 post.imageuploaded.map((image, index) => (
-//                   <div className='imgbox'>
-//                     <img key={index} src={image} alt={`Image ${index}`} style={{ width: '100%' }} />
-//                   </div>
-//                 ))
-//               )}
-//               <p>Likes: {post.likes}</p>
-//             </div>
-//           ))
-//         ) : (
-//           <p>No posts from friends.</p>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
+
 
 export default FriendsPosts;
 // const FriendsPosts = () => {

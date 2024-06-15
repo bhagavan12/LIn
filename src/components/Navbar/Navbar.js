@@ -474,9 +474,9 @@ const MyNavbar = () => {
 
     return (
         <nav className={showSidebar ? 'sidebar active' : 'sidebar'}>
-            <div className="navbar-container">
+            <div className="">
                 <div className="navbar-brand">
-                    <Link to="/home">LinkSpace</Link>
+                    <Link to="/home" className='solar--link-square-bold'><i className=''></i></Link>
                 </div>
                 <button className="toggle-btn" onClick={toggleSidebar}>
                     &#9776;
@@ -485,7 +485,7 @@ const MyNavbar = () => {
                     <Link to="/home" className="nav-link">
                         <i className="material-symbols--home"></i>
                     </Link>
-                    <Link className="nav-link search-link" onClick={toggleSearch}>
+                    {/* <Link className="nav-link search-link" onClick={toggleSearch}>
                         <i className="mingcute--search-line"></i>
                     </Link>
                     <div className='zzz'>
@@ -494,9 +494,24 @@ const MyNavbar = () => {
                                 <Search />
                             </div>
                         )}
+                    </div> */}
+                    <Link className="nav-link search-link" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
+                        <i className="mingcute--search-line"></i>
+                    </Link>
+
+                    <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop with scrolling</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <div className="" onClick={handleSearchClick}>
+                                <Search />
+                            </div>
+                        </div>
                     </div>
                     <Link to="/mdb" className="nav-link">
-                        <i className="ph--plus-fill"></i>
+                        <i className="gg--profile"></i>
                     </Link>
                     <Link to="/contact" className="nav-link">
                         <i className="fe--messanger"></i>
@@ -504,63 +519,26 @@ const MyNavbar = () => {
                     <Link to="/videos" className="nav-link">
                         <i className="mage--video-player-fill"></i>
                     </Link>
-                    <div className="dropdown">
-                        <Link
-                            to="#"
-                            className="nav-link"
-                            id="dropdown"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                        >
-                            <i className="mdi--view-dashboard"></i>
-                        </Link>
-                        <ul
-                            className="dropdown-menu dropdown-menu-dark text-small shadow"
-                            aria-labelledby="dropdown"
-                        >
-                            <li>
-                                <Link className="dropdown-item" to="#">
-                                    New project...
+                    <Link className="nav-link ">
+                        {/* <i className="" ></i> */}
+                        {user ? (
+                            <>
+                                <i className="ic--outline-logout  " onClick={handleLogout}>
+                                    {/* Logout */}
+                                </i>
+                            </>
+                        ) : (
+                            <>
+                                <Link to="/login" className="nav-link">
+                                    Login
                                 </Link>
-                            </li>
-                            <li>
-                                <Link className="dropdown-item" to="#">
-                                    Settings
+                                <Link to="/signup" className="nav-link">
+                                    Sign Up
                                 </Link>
-                            </li>
-                            <li>
-                                <Link className="dropdown-item" to="#">
-                                    Profile
-                                </Link>
-                            </li>
-                            <li>
-                                <hr className="dropdown-divider" />
-                            </li>
-                            <li>
-                                <Link className="dropdown-item" to="#" onClick={handleLogout}>
-                                    Sign out
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div className="navbar-auth">
-                    {user ? (
-                        <>
-                            <button className="nav-link" onClick={handleLogout}>
-                                Logout
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            <Link to="/login" className="nav-link">
-                                Login
-                            </Link>
-                            <Link to="/signup" className="nav-link">
-                                Sign Up
-                            </Link>
-                        </>
-                    )}
+                            </>
+                        )}
+                    </Link>
+
                 </div>
             </div>
         </nav>

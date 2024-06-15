@@ -49,6 +49,7 @@
 
 // export default Search;
 import React, { useState } from "react";
+import './search.css';
 import { Form } from "react-bootstrap";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
@@ -89,15 +90,35 @@ const Search = () => {
     };
 
     return (
+        // <div className="mt-3">
+        //     <Form.Group controlId="searchForm">
+        //         <Form.Control
+        //             type="text"
+        //             placeholder="Search users by username"
+        //             value={searchQuery}
+        //             onChange={handleSearchChange}
+        //         />
+        //     </Form.Group>
+        //     {searchResults.length > 0 && (
+        //         <ul>
+        //             {searchResults.map((user) => (
+        //                 <li key={user.uid} onClick={() => handleUserClick(user)}>
+        //                     {user.username}
+        //                 </li>
+        //             ))}
+        //         </ul>
+        //     )}
+        // </div>
         <div className="mt-3">
-            <Form.Group controlId="searchForm">
-                <Form.Control
-                    type="text"
-                    placeholder="Search users by username"
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                />
-            </Form.Group>
+            <label htmlFor="usernameField" className="usernamelabel label">Username</label>
+            <input
+                type="text"
+                placeholder="@"
+                id="usernameField"
+                required="required"
+                value={searchQuery}
+                onChange={handleSearchChange}
+            />
             {searchResults.length > 0 && (
                 <ul>
                     {searchResults.map((user) => (
