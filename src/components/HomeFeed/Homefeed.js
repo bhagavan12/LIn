@@ -88,31 +88,6 @@ const FriendsPosts = () => {
       return null;
     }
   };
-
-  // const handleLikeToggle = async (post) => {
-  //   const postRef = doc(db, 'posts', post.id);
-  //   const updatedLikedBy = post.likedBy || [];
-
-  //   if (updatedLikedBy.includes(user.uid)) {
-  //     updatedLikedBy.splice(updatedLikedBy.indexOf(user.uid), 1);
-  //     await updateDoc(postRef, {
-  //       likes: post.likes - 1,
-  //       likedBy: updatedLikedBy
-  //     });
-  //     post.likes -= 1;
-  //   } else {
-  //     updatedLikedBy.push(user.uid);
-  //     await updateDoc(postRef, {
-  //       likes: post.likes + 1,
-  //       likedBy: updatedLikedBy
-  //     });
-  //     post.likes += 1;
-  //   }
-
-  //   setFriendsPosts((prevPosts) =>
-  //     prevPosts.map((p) => (p.id === post.id ? { ...p, likes: post.likes, likedBy: updatedLikedBy } : p))
-  //   );
-  // };
    const handleLikeToggle = async (post) => {
     const postRef = doc(db, 'posts', post.id);
     const updatedLikedBy = post.likedBy || [];
@@ -210,7 +185,7 @@ const FriendsPosts = () => {
                   className={`like-button ${post.likedBy && post.likedBy.includes(user.uid) ? 'liked' : ''}`}
                   onClick={() => handleLikeToggle(post)}
                 >
-                  <i className={post.likedBy && post.likedBy.includes(user.uid) ? 'flat-color-icons--like' : 'icon-park-outline--like'}></i>
+                  <i className={post.likedBy && post.likedBy.includes(user.uid) ? 'icon-park-solid--like' : 'icon-park-outline--like'}></i>
                 </span>
                 <span className="comment-icon">
                   <i className="iconamoon--comment-thin"></i>

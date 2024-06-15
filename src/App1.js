@@ -95,7 +95,7 @@ const AppContent = () => {
           <Route path='/search' element={<Search />} />
           <Route path='/home' element={<Home />} />
           <Route path="/userprofile/:userId" element={<Profiles />} />
-          <Route path="/notifications/:userId" element={<Notification />} />
+          <Route path="/notifications" element={<Notification />} />
         </Routes>
       </div>
     </>

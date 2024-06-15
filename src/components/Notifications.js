@@ -1,23 +1,212 @@
+
+/*new */
+// import React, { useState, useEffect } from "react";
+// import { db } from "../firebase";
+// import { ref, getDownloadURL, listAll } from "firebase/storage";
+// import { useParams, useLocation } from "react-router-dom";
+// import { collection, query, where, getDoc,getDocs, deleteDoc, updateDoc, doc, setDoc } from "firebase/firestore";
+// import { storage } from "../firebase";
+
+// const FriendRequestsPage = ({ userId }) => {
+//     const [profileImageUrl, setProfileImageUrl] = useState(null);
+//     const [friendRequests, setFriendRequests] = useState([]);
+//     const [acceptedRequests, setAcceptedRequests] = useState(new Set());
+
+//     // Fetch profile image URL for the given userId
+//     const getProfileImageUrl = async (userId) => {
+//         try {
+//             const folderRef = ref(storage, `profile_photos/${userId}/`);
+//             const filesList = await listAll(folderRef);
+
+//             if (filesList.items.length > 0) {
+//                 const firstFileRef = filesList.items[0];
+//                 const url = await getDownloadURL(firstFileRef);
+//                 return url;
+//             } else {
+//                 return null;
+//             }
+//         } catch (error) {
+//             console.error("Error fetching profile image:", error);
+//             return null;
+//         }
+//     };
+
+//     // Fetch friend requests for the given userId
+//     useEffect(() => {
+        
+//         const fetchFriendRequests = async () => {
+//             try {
+//                 const q = query(collection(db, 'friendRequests'), where('receiverUid', '==', userId));
+//                 const snapshot = await getDocs(q);
+
+//                 const requestsData = snapshot.docs.map(async doc => {
+//                     const requestData = doc.data();
+//                     const senderUid = requestData.senderUid;
+
+//                     // Fetch sender's user data
+//                     const senderUserData = await getUserData(senderUid);
+//                     console.log("senderUserData",senderUserData);
+//                     return {
+//                         id: doc.id,
+//                         senderUid: senderUid,
+//                         senderUsername: senderUserData.username,
+//                         senderAvatarUrl: senderUserData.avatarUrl
+//                     };
+//                 });
+
+//                 // const friendRequestsData = await Promise.all(requestsData);
+//                 setFriendRequests(requestsData);
+//             } catch (error) {
+//                 console.error("Error fetching friend requests:", error);
+//             }
+//         };
+
+//         if (userId) {
+//             fetchFriendRequests();
+//         }
+//     }, [userId]);
+
+//     // Function to fetch user data based on userId
+//     const getUserData = async (userId) => {
+//         try {
+//             const userDocRef = doc(db, 'users', userId); // Assuming 'users' is your users collection
+//             const userDoc = await getDoc(userDocRef);
+
+//             if (userDoc.exists()) {
+//                 return userDoc.data();
+//             } else {
+//                 console.error("User document not found");
+//                 return null;
+//             }
+//         } catch (error) {
+//             console.error("Error fetching user data:", error);
+//             return null;
+//         }
+//     };
+
+//     // Function to accept a friend request
+//     const acceptRequest = async (requestId, senderId) => {
+//         try {
+//             if (acceptedRequests.has(requestId)) {
+//                 console.log("Request already accepted.");
+//                 return;
+//             }
+
+//             // Update sender's 'friends' document
+//             const senderDocRef = doc(db, 'friends', senderId);
+//             await updateFriends(senderDocRef, userId);
+
+//             // Update receiver's 'friends' document
+//             const receiverDocRef = doc(db, 'friends', userId);
+//             await updateFriends(receiverDocRef, senderId);
+
+//             // Delete the friend request document
+//             console.log("Deleting friend request with ID:", requestId);
+//             if (requestId) {
+//                 await deleteDoc(doc(db, "friendRequests", requestId));
+//             } else {
+//                 console.error("requestId is undefined");
+//             }
+
+//             // Mark request as accepted
+//             setAcceptedRequests(prevState => new Set(prevState.add(requestId)));
+//             console.log("Friend request accepted and deleted successfully!");
+//         } catch (error) {
+//             console.error("Error accepting friend request:", error);
+//         }
+//     };
+
+//     // Function to update 'friends' document for a user
+//     const updateFriends = async (userDocRef, friendId) => {
+//         try {
+//             const docSnapshot = await getDoc(userDocRef);
+
+//             if (!docSnapshot.exists()) {
+//                 await setDoc(userDocRef, {
+//                     userId: userDocRef.id,
+//                     friends: [friendId]
+//                 });
+//             } else {
+//                 const friendsData = docSnapshot.data();
+//                 const updatedFriends = [...friendsData.friends, friendId];
+//                 await updateDoc(userDocRef, { friends: updatedFriends });
+//             }
+//         } catch (error) {
+//             console.error("Error updating friends:", error);
+//         }
+//     };
+
+//     return (
+//         <div>
+//             <h1>Friend Requests</h1>
+//             <ul>
+//                 {friendRequests.map(request => (
+//                     <li key={request.id}>
+//                         <div>
+//                             <img src={request.senderAvatarUrl} alt="Avatar" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+//                             <span>{request.senderUsername}</span>
+//                             <button onClick={() => acceptRequest(request.id, request.senderUid)}>Accept</button>
+//                         </div>
+//                     </li>
+//                 ))}
+//             </ul>
+//         </div>
+//     );
+// };
+
+// export default FriendRequestsPage;
+/*new */
 import React, { useState, useEffect } from "react";
 import { db } from "../firebase";
+
+import { ref, getDownloadURL, listAll } from "firebase/storage";
+import { useUserAuth } from '../context/UserAuthContext';
 import { useParams, useLocation } from "react-router-dom";
 import { collection, addDoc, doc, getDoc, query, where, getDocs, deleteDoc, updateDoc, setDoc } from "firebase/firestore"; // Import Firestore methods
 
-export default function FriendRequestsPage() {
+import { storage } from "../firebase";
+export default function FriendRequestsPage({userId}) {
+    // const { user} = useUserAuth();
+    const [profileImageUrl, setProfileImageUrl] = useState(null);
     const [friendRequests, setFriendRequests] = useState([]);
     const [acceptedRequests, setAcceptedRequests] = useState(new Set());
-    const { userId } = useParams();
+    // const { userId } = useParams();
+    // useEffect(() => {
+    //     const fetchProfileImage = async () => {
+    //         if (user) {
+    //             const url = await getProfileImageUrl(user.uid);
+    //             setProfileImageUrl(url);
+    //         }
+    //     };
+    //     fetchProfileImage();
+    // }, [user]);
+    const getProfileImageUrl = async (userId) => {
+        try {
+            const folderRef = ref(storage, `profile_photos/${userId}/`);
+            const filesList = await listAll(folderRef);
+
+            if (filesList.items.length > 0) {
+                const firstFileRef = filesList.items[0];
+                const url = await getDownloadURL(firstFileRef);
+                return url;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            console.error("Error fetching profile image:", error);
+            return null;
+        }
+    };
+    
     useEffect(() => {
         const fetchFriendRequests = async () => {
             try {
-                // const snapshot = await db.collection('friendRequests').where('receiverUid', '==', userId).get();
-                // const requestsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
                 const q = query(collection(db, 'friendRequests'), where('receiverUid', '==', userId));
-                // Execute the query
+                
                 const snapshot = await getDocs(q);
 
                 console.log(snapshot);
-                // Process the snapshot and return data
                 const friendRequests = snapshot.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
@@ -74,13 +263,12 @@ export default function FriendRequestsPage() {
             const docSnapshot = await getDoc(userDocRef);
             
             if (!docSnapshot.exists()) {
-                // If document doesn't exist, create it with the given friendId
+                
                 await setDoc(userDocRef, {
                     userId: userDocRef.id,
                     friends: [friendId]
                 });
             } else {
-                // If document exists, update the 'friends' array
                 const friendsData = docSnapshot.data();
                 const updatedFriends = [...friendsData.friends, friendId];
                 await updateDoc(userDocRef, { friends: updatedFriends });
