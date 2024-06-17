@@ -1,0 +1,116 @@
+.profile_container {
+    margin: 50px 50px;
+    width: 250px;
+    height: 250px;
+    background-color: white;
+    /* Ensure the background color is white */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    /* Hide overflow if any */
+    position: relative;
+    
+}
+
+.proimg {
+    width: 80%;
+    height: 80%;
+    background-size: contain;
+    /* Ensure the image scales correctly */
+    background-repeat: no-repeat;
+    /* Prevent repeating the image */
+    background-position: center;
+    /* Center the image within the container */
+    border-radius: 50%;
+    /* If you want a circular image, otherwise remove this */
+
+}
+
+.profile_data {
+    margin-top: 50px;
+    width: 70%;
+    height: 250px;
+    background-color: white;
+    /* justify-content: center; */
+    overflow: hidden;
+    /* position: relative; */
+}
+.Fstrow_data{
+    align-items: flex-start;
+    display: flex;
+}
+.Sndrow_data{
+    align-items: flex-start;
+    display: flex;
+}
+.Trdrow_data{
+    align-items: flex-start;
+    /* display: flex; */
+}
+.profile_box {
+    display: flex;
+    background-color: white;
+}
+
+.Fstrow_data > #uname {
+    text-align: left;
+    padding:20px 10px;
+    font-size: larger;
+}
+.Fstrow_data > #iconsett {
+    margin: 21px 1px;
+    text-align: left;
+    padding:10px 10px;
+    font-size: xx-small;
+    /* border: 1px black solid; */
+}
+.Sndrow_data > #nposts,.Sndrow_data > #nfriends {
+    text-align: left;
+    padding: 10px 20px;
+    font-size: medium;
+}
+.Trdrow_data > #fname,.Trdrow_data > #bio {
+    text-align: left;
+    padding: 5px 20px;
+    font-size: medium;
+}
+.Fstrow_data > .pbutton{
+    font-weight: bold;
+    margin-left: 10px;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px none;
+}
+.postfeed,
+.profile_container,
+.proimg ,
+.profile_data,
+.Fstrow_data,
+.Sndrow_data,
+.Trdrow_data{
+    /* border: 1px black solid; */
+}
+
+
+
+/*icons*/
+.system-uicons--settings {
+    display: inline-block;
+    width: 3.9em;
+    height: 3.9em;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 21 21'%3E%3Cg fill='none' fill-rule='evenodd' stroke='%23000000' stroke-linecap='round' stroke-linejoin='round' transform='translate(3 3)'%3E%3Cpath stroke-width='0.93' d='M7.5.5c.351 0 .697.026 1.034.076l.508 1.539c.445.127.868.308 1.26.536l1.46-.704c.517.397.977.865 1.365 1.389l-.73 1.447c.221.396.395.822.514 1.27l1.53.533a7.066 7.066 0 0 1-.017 1.948l-1.539.508a5.567 5.567 0 0 1-.536 1.26l.704 1.46a7.041 7.041 0 0 1-1.389 1.365l-1.447-.73a5.507 5.507 0 0 1-1.27.514l-.533 1.53a7.066 7.066 0 0 1-1.948-.017l-.508-1.539a5.567 5.567 0 0 1-1.26-.536l-1.46.704a7.041 7.041 0 0 1-1.365-1.389l.73-1.447a5.565 5.565 0 0 1-.514-1.27l-1.53-.534a7.066 7.066 0 0 1 .017-1.947l1.539-.508c.127-.445.308-.868.536-1.26l-.704-1.46a7.041 7.041 0 0 1 1.389-1.365l1.447.73a5.507 5.507 0 0 1 1.27-.514l.534-1.53A7.06 7.06 0 0 1 7.5.5'/%3E%3Ccircle cx='7.5' cy='7.5' r='3'/%3E%3C/g%3E%3C/svg%3E");
+  }
+/*icons*/
+
+@media (max-width: 600px) {
+    
+}
+.postfeed{
+    /* border: 1px solid black; */
+    margin: 20px 40px;
+}
+

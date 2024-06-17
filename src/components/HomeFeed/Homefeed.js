@@ -10,6 +10,7 @@ import './HomeFeed.css';
 import Navbar from '../Navbar/Navbar';
 const FriendsPosts = () => {
   const { user } = useUserAuth();
+  const [uuid,setUuid]=useState('');
   const [friendsPosts, setFriendsPosts] = useState([]);
   const [friendsUIDs, setFriendsUIDs] = useState([]);
   const [profileImageUrl, setProfileImageUrl] = useState(null);
@@ -19,6 +20,7 @@ const FriendsPosts = () => {
       if (!user) return;
 
       try {
+        setUuid(user.uid);
         // Step 1: Get the user's friends' UIDs from the 'friends' collection
         const friendsQuery = query(collection(db, 'friends'), where('userId', '==', user.uid));
         const friendsSnapshot = await getDocs(friendsQuery);
@@ -148,7 +150,7 @@ const FriendsPosts = () => {
       <div>
         {friendsPosts.length > 0 ? (
           friendsPosts.map(post => (
-            <div className='postcard' key={post.id}>
+            <div className='postcard'>
               <div className="post-header">
                 <img src={post.profileImageUrl} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
                 <div>
@@ -182,10 +184,10 @@ const FriendsPosts = () => {
               </div> */}
               <div className="like-section">
                 <span
-                  className={`like-button ${post.likedBy && post.likedBy.includes(user.uid) ? 'liked' : ''}`}
-                  onClick={() => handleLikeToggle(post)}
+                  className={`like-button`}
+                  // onClick={() => handleLikeToggle(post)}
                 >
-                  <i className={post.likedBy && post.likedBy.includes(user.uid) ? 'icon-park-solid--like' : 'icon-park-outline--like'}></i>
+                  <i className={post.likedBy && post.likedBy.includes(uuid) ? 'icon-park-solid--like' : 'icon-park-outline--like'} onClick={() => handleLikeToggle(post)}></i>
                 </span>
                 <span className="comment-icon">
                   <i className="iconamoon--comment-thin"></i>
@@ -203,6 +205,7 @@ const FriendsPosts = () => {
                 <div class="line-1"></div>
                 <div class="line-2"></div>
                 <div class="line-3"></div>
+                <div class="line-1"></div>
                 <div class="line-4"></div>
               </div>
             </div>

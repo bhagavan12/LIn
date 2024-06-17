@@ -3,7 +3,7 @@ import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCar
 import React, { useState, useEffect } from "react";
 import useProfileImage from "./uploadImage";
 import { useUserAuth } from "../context/UserAuthContext";
-import { ref, getDownloadURL, listAll ,getMetadata} from "firebase/storage";
+import { ref, getDownloadURL, listAll, getMetadata } from "firebase/storage";
 import { db, storage } from "../firebase";
 import { collection, addDoc, doc, getDoc, query, where, getDocs, deleteDoc, updateDoc, setDoc } from "firebase/firestore";
 import './mdb.css';
@@ -186,7 +186,7 @@ export default function EditButton() {
                         <UserPost />
                       </Modal.Body>
                       <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose1}>
+                        <Button className='button' variant="secondary" onClick={handleClose1}>
                           Close
                         </Button>
                         <Button variant="primary" onClick={handleClose1}>

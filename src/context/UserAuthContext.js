@@ -28,6 +28,7 @@ export function UserAuthContextProvider({ children }) {
           const token = await currentUser.getIdToken();
           if (token === sessionToken) {
             setUser(currentUser);
+            console.log("curruser",user);
             await fetchUserData(currentUser.email);
           } else {
             logOut();
@@ -103,6 +104,7 @@ export function UserAuthContextProvider({ children }) {
 
   function logOut() {
     Cookies.remove("session_token");
+    // setUser(null);
     return signOut(auth);
   }
 

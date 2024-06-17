@@ -157,29 +157,22 @@
 // export default FriendRequestsPage;
 /*new */
 import React, { useState, useEffect } from "react";
-import { db } from "../firebase";
-
+import { db } from "../../firebase";
+import './Notifications.css';
 import { ref, getDownloadURL, listAll } from "firebase/storage";
-import { useUserAuth } from '../context/UserAuthContext';
+import { useUserAuth } from '../../context/UserAuthContext';
 import { useParams, useLocation } from "react-router-dom";
 import { collection, addDoc, doc, getDoc, query, where, getDocs, deleteDoc, updateDoc, setDoc } from "firebase/firestore"; // Import Firestore methods
-
-import { storage } from "../firebase";
+import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
+ 
+import { storage } from "../../firebase";
 export default function FriendRequestsPage({userId}) {
-    // const { user} = useUserAuth();
+    const { userDataf} = useUserAuth();
+    const [friendData,setFriendData]=useState({});
     const [profileImageUrl, setProfileImageUrl] = useState(null);
     const [friendRequests, setFriendRequests] = useState([]);
     const [acceptedRequests, setAcceptedRequests] = useState(new Set());
-    // const { userId } = useParams();
-    // useEffect(() => {
-    //     const fetchProfileImage = async () => {
-    //         if (user) {
-    //             const url = await getProfileImageUrl(user.uid);
-    //             setProfileImageUrl(url);
-    //         }
-    //     };
-    //     fetchProfileImage();
-    // }, [user]);
+    const navigate = useNavigate();
     const getProfileImageUrl = async (userId) => {
         try {
             const folderRef = ref(storage, `profile_photos/${userId}/`);
@@ -197,29 +190,86 @@ export default function FriendRequestsPage({userId}) {
             return null;
         }
     };
-    
-    useEffect(() => {
-        const fetchFriendRequests = async () => {
-            try {
+    async function fetchUserData(userId) {
+        try {
+          const q = query(collection(db, "users"), where("uid", "==", userId));
+          const querySnapshot = await getDocs(q);
+          if (!querySnapshot.empty) {
+            const userDocSnapshot = querySnapshot.docs[0];
+            const userData = userDocSnapshot.data();
+            console.log("Fetched friend Data:", userData);
+            // const profileImageUrl = await getProfileImageUrl(userId);
+            // setFriendData({...userData, profileImageUrl });
+            // setFriendData(userData);
+            const profileImageUrl = await getProfileImageUrl(userId);
+            console.log("frienddata",{ ...userData, profileImageUrl })
+            return { ...userData, profileImageUrl };
+          } else {
+            console.log("User document not found for email:", userId);
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      }
+      useEffect(() => {
+        
+                const fetchFriendRequests = async () => {
+                    try {
+                        const q = query(collection(db, 'friendRequests'), where('receiverUid', '==', userId));
+                        const snapshot = await getDocs(q);
+        
+                        const requestsData = snapshot.docs.map(async doc => {
+                            const requestData = doc.data();
+                            const senderUid = requestData.senderUid;
+        
+                            // Fetch sender's user data
+                            const senderUserData = await fetchUserData(senderUid);
+                            // console.log(senderUserData)
+                            console.log("senderUserData",senderUserData);
+                            return senderUserData;
+                            // return {
+                            //     dob:senderUserData.dob,
+                            //     fullName
+                            //     id: doc.id,
+                            //     senderUid: senderUid,
+                            //     senderUsername: senderUserData.username,
+                            //     senderAvatarUrl: senderUserData.profileImageUrl
+                            // };
+                        });
+        
+                        const friendRequestsData = await Promise.all(requestsData);
+                        setFriendRequests(friendRequestsData);
+                    } catch (error) {
+                        console.error("Error fetching friend requests:", error);
+                    }
+                };
+        
+                if (userId) {
+                    fetchFriendRequests();
+                }
+            }, [userId]);
+    // useEffect(() => {
+    //     const fetchFriendRequests = async () => {
+    //         try {
                 
-                const q = query(collection(db, 'friendRequests'), where('receiverUid', '==', userId));
+    //             const q = query(collection(db, 'friendRequests'), where('receiverUid', '==', userId));
                 
-                const snapshot = await getDocs(q);
+    //             const snapshot = await getDocs(q);
 
-                console.log(snapshot);
-                const friendRequests = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
-                setFriendRequests(friendRequests);  
-                console.log("friendrequests from notifications", friendRequests);
-            } catch (error) {
-                console.error("Error fetching friend requests:", error);
-            }
-        };
+    //             console.log(snapshot);
+    //             const friendRequests = snapshot.docs.map(doc => ({
+    //                 id: doc.id,
+    //                 ...doc.data()
+    //             }));
+    //             setFriendRequests(friendRequests);  
+    //             console.log("friendrequests from notifications", friendRequests);
+    //         } catch (error) {
+    //             console.error("Error fetching friend requests:", error);
+    //         }
+    //     };
 
-        fetchFriendRequests();
-    }, [userId]);
+    //     fetchFriendRequests();
+    // }, [userId]);
 
     const acceptRequest = async (requestId, senderId) => {
         try {
@@ -277,20 +327,50 @@ export default function FriendRequestsPage({userId}) {
             console.error("Error updating friends:", error);
         }
     };
-    
+    const handleUserClick = async (user) => {
+        const { uid } = await userDataf(); // Get the logged-in user's UID
+        if (uid === user.uid){
+            navigate("/mdb"); // Navigate to /mdb if the logged-in user's UID matches the clicked user's UID
+        } else {
+            // const userr={
+            //     uid:user.senderUid,
+            //     email:user.email,
+            //     fullName:user.fullName,
+            //     username:user.senderUsername
+            //     // dob:
+
+            // }
+            navigate(`/userprofile/${user.uid}`, { state: { userData: user } });
+        }
+        // navigate(`/userprofile/${user.uid}`, { state: { userData: user } }); // Navigate to user profile page with user data
+    };
     
         return (
+        // <div>
+        //     <h1>Friend Requests</h1>
+        //     <ul>
+        //         {friendRequests.map(request => (
+        //             <li key={request.id}>
+        //                 Sender: {request.senderUid}
+        //                 <button onClick={() => acceptRequest(request.id, request.senderUid)}>Accept</button>
+        //             </li>
+        //         ))}
+        //     </ul>
+        // </div>
         <div>
-            <h1>Friend Requests</h1>
-            <ul>
-                {friendRequests.map(request => (
-                    <li key={request.id}>
-                        Sender: {request.senderUid}
-                        <button onClick={() => acceptRequest(request.id, request.senderUid)}>Accept</button>
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <h1>Friend Requests</h1>
+        <ul>
+            {friendRequests.map(request => (
+                <li key={request.id} style={{ marginBottom: '20px',border:"1px solid black",display:"flex"}}>
+                    <div onClick={() => handleUserClick(request)} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' ,marginRight:"50px"}}>
+                        <img src={request.profileImageUrl} alt="Avatar" style={{ width: '50px', height: '50px', borderRadius: '50%', marginRight: '20px' }} />
+                        <span>{request.username}</span>
+                    </div>
+                    <button className="acceptbtn" onClick={() => acceptRequest(request.id, request.uid)}>Accept</button>
+                </li>
+            ))}
+        </ul>
+    </div>
     );
 }
 

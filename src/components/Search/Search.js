@@ -84,6 +84,7 @@ const Search = () => {
         if (uid === user.uid){
             navigate("/mdb"); // Navigate to /mdb if the logged-in user's UID matches the clicked user's UID
         } else {
+            console.log("userrr",user);
             navigate(`/userprofile/${user.uid}`, { state: { userData: user } });
         }
         // navigate(`/userprofile/${user.uid}`, { state: { userData: user } }); // Navigate to user profile page with user data

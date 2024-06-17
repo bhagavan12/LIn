@@ -1,0 +1,44 @@
+/* Responsive Layout for Posts Grid */
+.postsgrid ,.postcont ,.posts{
+  /* border: 1px solid black; */
+}
+.postsgrid {
+  margin: 50px 50px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 10px;
+ 
+  background-color: white;
+  position: relative;
+}
+
+.postcont {
+  width: 100%;
+  padding-bottom: 100%;
+  /* Ensures the height is equal to the width, making it square */
+  position: relative;
+  overflow: hidden;
+}
+
+.posts {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+  border-radius: 5px;
+}
+
+/* Responsive Layout Adjustments */
+@media (max-width: 600px) {
+  /* .profile_container {
+    flex-direction: column;
+  } */
+
+  .postsgrid {
+      margin: 20px 0;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}

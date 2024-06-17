@@ -444,10 +444,10 @@ import { useUserAuth } from '../../context/UserAuthContext';
 import Search from '../Search/Search';
 import { ref, getDownloadURL, listAll } from "firebase/storage";
 import { storage } from "../../firebase";
-import Notifications from '../Notifications';
+import Notifications from '../Notifications/Notifications';
 const MyNavbar = () => {
     const { user, logOut } = useUserAuth();
-    const { userDataf } = useUserAuth();
+    // const { userDataf } = useUserAuth();
     const [uid,setUid] =useState('');
     const navigate = useNavigate();
     const [profileImageUrl, setProfileImageUrl] = useState(null);
@@ -456,13 +456,14 @@ const MyNavbar = () => {
             if (user) {
                 const url = await getProfileImageUrl(user.uid);
                 setProfileImageUrl(url);
+                setUid(user.uid);
             }
         };
         fetchProfileImage();
     }, [user]);
-    const handlenotifications = async () => {
-        setUid(user.uid);
-    };
+    // const handlenotifications = () => {
+    //     setUid(user.uid);
+    // };
     const getProfileImageUrl = async (userId) => {
         try {
             const folderRef = ref(storage, `profile_photos/${userId}/`);
@@ -483,7 +484,7 @@ const MyNavbar = () => {
     const handleLogout = async () => {
         try {
             await logOut();
-            navigate('/login');
+            navigate('/');
         } catch (error) {
             console.error('Error logging out:', error);
         }
@@ -544,7 +545,7 @@ const MyNavbar = () => {
                         </div>
                     </div>
                     
-                    <Link className="nav-link" onClick={handlenotifications} data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" aria-controls="offcanvasNotifications">
+                    <Link className="nav-link" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" aria-controls="offcanvasNotifications">
                         <i className="icon-park-outline--like"></i>
                     </Link>
                     <div className="offcanvas offcanvas-start" data-bs-scroll="true" tabIndex="-1" id="offcanvasNotifications" aria-labelledby="offcanvasNotificationsLabel">
@@ -618,17 +619,17 @@ const MyNavbar = () => {
                             <i className="gg--profile"></i>
                         )}
                     </Link>
-                    <Link className="nav-link">
-                        {user ? (
+                    <Link className="nav-link" onClick={handleLogout}>
+                        {/* {user ? ( */}
                             <>
-                                <i className="ic--outline-logout" onClick={handleLogout}></i>
+                                <i className="ic--outline-logout" ></i>
                             </>
-                        ) : (
+                        {/* ) : (
                             <>
                                 <Link to="/login" className="nav-link">Login</Link>
                                 <Link to="/signup" className="nav-link">Sign Up</Link>
                             </>
-                        )}
+                        )} */}
                     </Link>
                 </div>
             </div>

@@ -58,7 +58,7 @@
     margin-bottom: 20px;
     border: 1px solid #d3d3d3;
     padding: 15px;
-    background-color: #e3e3e3;
+    background-color: #ffffff;
     overflow: hidden;
     transition: width 0.1s ,height 0.1s;
   }
@@ -79,9 +79,12 @@
     height: 100%;
     position: relative;
   }
-  
-  .loader .wrapper > div {
+  .centrr{
+    background-color: white;
+  }
+  .loader .wrapper > div{
     background-color: #cacaca;
+    border-radius: 10px;
   }
   
   .loader .circle {
@@ -116,13 +119,14 @@
     position: absolute;
     top: 57px;
     left: 0px;
-    height: 10px;
+    height: 200px;
     width: 100%;
+    margin-bottom: 10px;
   }
   /*loader*/
   .loader .line-4 {
     position: absolute;
-    top: 80px;
+    top: 300px;
     left: 0px;
     height: 10px;
     width: 92%;
@@ -204,8 +208,8 @@
   }
   .icon-park-outline--like {
     display: inline-block;
-    width: 2em;
-    height:2em;
+    width: 1.6em;
+    height:1.6em;
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='4' d='M15 8C8.925 8 4 12.925 4 19c0 11 13 21 20 23.326C31 40 44 30 44 19c0-6.075-4.925-11-11-11c-3.72 0-7.01 1.847-9 4.674A10.987 10.987 0 0 0 15 8'/%3E%3C/svg%3E");
@@ -221,13 +225,7 @@
   margin-right: 10px;
 }
 
-.iconamoon--comment-thin {
-  display: inline-block;
-  width: 3em;
-  height: 3em;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-}
+
 .like-section {
   display: flex;
   align-items: center;

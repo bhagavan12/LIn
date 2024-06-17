@@ -261,8 +261,8 @@
 
 // export default PostList;
 import React, { useState, useEffect } from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBCardImage} from "mdb-react-ui-kit";
-
+import { MDBContainer, MDBRow, MDBCol, MDBCardImage } from "mdb-react-ui-kit";
+import './PostShow.css';
 import { MDBCardVideo } from 'mdbreact';
 
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -341,7 +341,7 @@ const PostList = () => {
     };
     return (
         <div>
-            <MDBContainer>
+            {/* <MDBContainer>
                 <MDBRow className="row-cols-1 row-cols-sm-2 row-cols-lg-3 g-5">
                     {posts.map((post) => (
                         <MDBCol key={post.id}>
@@ -365,7 +365,36 @@ const PostList = () => {
                         </MDBCol>
                     ))}
                 </MDBRow>
-            </MDBContainer>
+            </MDBContainer> */}
+            <div className='postfeed'>
+
+                <div className='postsgrid'>
+                    {posts.map((post, index) => (
+                        <div>
+                            {isVideoUrl(post.imageuploaded[0]) ? (
+                                <div key={index} className='postcont'>
+                                    <MDBCardVideo
+                                        src={post.imageuploaded[0]}
+                                        // className="w-100 rounded-3"
+                                         className="posts"
+                                        onClick={() => handlePostClick(post)}
+                                    />
+                                </div>
+                            ) : (
+                                <div key={index} className='postcont'>
+                                    <img
+                                        src={post.imageuploaded[0]}
+                                        alt={`Post ${post.id}`}
+                                        className="posts"
+                                        // style={{ width: "450px", height: "330px", cursor: "pointer" }}
+                                        onClick={() => handlePostClick(post)}
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </div>
 
             {/* Modal using React Bootstrap */}
             <Modal show={showModal} onHide={() => setShowModal(false)} >

@@ -64,6 +64,7 @@ export default function EditButton() {
                     setUserData(state.userData);
                 }
                 setUserData(state.userData);
+                console.log("userData.userData",state.userData);
 
                 // Fetch and set profile image URL
                 const imageUrl = await getProfileImageUrl(userId);

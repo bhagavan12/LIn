@@ -23,7 +23,7 @@
 //     //     <Col>
 //           <UserAuthContextProvider>
 //             <Routes>
-            
+
 //               <Route
 //                 path="/post"
 //                 element={
@@ -52,7 +52,7 @@
 // }
 
 // export default App1;
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Post from './Post';
 import App from './App';
@@ -60,23 +60,26 @@ import Login from './components/Login';
 import ProtectedRoute from "./components/ProtectedRoute";
 import Signup from './components/Signup';
 import { UserAuthContextProvider, useUserAuth } from './context/UserAuthContext';
-import Mdb from './components/mdbprofile';
+import Mdb from './components/Profile/Profile';
 import UserPost from './components/UserPost';
 import PostShow from './components/PostShow';
 import Search from './components/Search/Search';
 import Profiles from './components/Search/Profiles';
-import Notification from './components/Notifications';
+import Notification from './components/Notifications/Notifications';
 import Home from './components/HomeFeed/Homefeed';
 import Navbar from './components/Navbar/Navbar';
 import './App.css'; // Import your CSS file for general styles
 
 const AppContent = () => {
   const { user } = useUserAuth();
-  
+  const [yes, setYes] = useState(user);
+  useEffect(() => {
+    setYes(user);
+  }, [user]);
   return (
     <>
-      {user && <Navbar />}
-      <div className={user ? "main-content" : ""}>
+      {yes && <Navbar />}
+      <div className={yes ? "main-content" : ""}>
         <Routes>
           <Route
             path="/post"
@@ -87,7 +90,7 @@ const AppContent = () => {
             }
           />
           <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
+          {/* <Route path="/login" element={<Login />} /> */}
           <Route path="/signup" element={<Signup />} />
           <Route path='/mdb' element={<Mdb />} />
           <Route path='/userpost' element={<UserPost />} />
@@ -106,7 +109,7 @@ const App1 = () => {
   return (
     <UserAuthContextProvider>
       {/* <Router> */}
-        <AppContent />
+      <AppContent />
       {/* </Router>/\ */}
     </UserAuthContextProvider>
   );
