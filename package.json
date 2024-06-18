@@ -28,21 +28,20 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "npm run lint:css && react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint:css": "stylelint '**/*.{css,scss}'",
-    "lint:css:fix": "stylelint '**/*.{css,scss}' --fix"
+    "eject": "react-scripts eject"
+    
   },
   "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ],
-    "rules": {
-      "no-unused-vars": "warn"
-    }
-  },
+  "extends": [
+    "react-app",
+    "react-app/jest"
+  ],
+  "rules": {
+    "no-unused-vars": "warn"
+  }
+},
   "browserslist": {
     "production": [
       ">0.2%",
