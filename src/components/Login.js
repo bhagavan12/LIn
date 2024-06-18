@@ -52,9 +52,9 @@ const Login = () => {
   };
 
   return (
-    <>
+    <div style={{width:"400px",margin:"auto"}}>
       <div className="p-4 box">
-        <h2 className="mb-3">Cloud Voting App</h2>
+        <h2 className="mb-3">LinkSpace</h2>
 
         {error && <Alert variant="danger">{error}</Alert>}
 
@@ -89,18 +89,18 @@ const Login = () => {
           </div>
         </Form>
         <hr />
-        <div>
+        {/* <div>
           <GoogleButton
             className="g-btn"
             type="dark"
             onClick={handleGoogleSignIn}
           />
-        </div>
+        </div> */}
       </div>
       <div className="p-4 box mt-3 text-center">
         Don't have an account? <Link to="/signup">Sign up</Link>
       </div>
-    </>
+    </div>
   );
 };
 
