@@ -10,6 +10,7 @@ import { storage, db } from "../../firebase";
 import '../Profile/Profile1.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { useNavigate } from "react-router-dom";
 import SearchedProfilePost from './SearchedProfilePost';
 // import UserPost from './UserPost';
 import { useParams, useLocation } from "react-router-dom";
@@ -26,10 +27,16 @@ export default function EditButton() {
     const [toastMessage, setToastMessage] = useState("");
     // const 
     /*modal*/
+    const [friendsDetails, setFriendsDetails] = useState([]);
+    const navigate = useNavigate();
     const location = useLocation(); // Get the location object
     const { userId } = useParams();
     const { userDataf } = useUserAuth();
+    const [showFriends, setShowFriends] = useState(false); // State to control friends modal
+    const [friends, setFriends] = useState([]); //
     // setSenderid(userDataff.uid);
+    const handleCloseFriends = () => setShowFriends(false);
+    const handleShowFriends = () => setShowFriends(true);
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -230,10 +237,13 @@ export default function EditButton() {
         try {
             const friendDocRef = doc(db, "friends", userId);
             const friendDocSnap = await getDoc(friendDocRef);
-
+            console.log("friendDocSnap", friendDocSnap);
             if (friendDocSnap.exists()) {
                 const friendData = friendDocSnap.data();
                 if (friendData.friends) {
+                    setFriends(friendData.friends);
+                    console.log("friends of ", userId, friendData.friends);
+                    await fetchFriendsDetails(friendData.friends);
                     return friendData.friends.length;
                 }
             }
@@ -273,6 +283,40 @@ export default function EditButton() {
             setToastMessage("");
         }, 5000); // Hide toast after 5 seconds
     };
+    const handleUserClick = async (user) => {
+        const { uid } = await userDataf();
+        if (uid === user.uid) {
+            navigate("/mdb");
+        } else {
+            navigate(`/userprofile/${user.uid}`, { state: { userData: user } });
+        }
+    };
+    const fetchFriendsDetails = async (friendsList) => {
+        try {
+            console.log("friendsList:", friendsList); // Debug: log the input list
+            const friendsDetailsArray = [];
+            for (const friendId of friendsList) {
+                console.log("Fetching details for friend ID:", friendId); // Debug: log the friend ID
+                const q = query(collection(db, "users"), where("uid", "==", friendId));
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty) {
+                    const userDocSnapshot = querySnapshot.docs[0];
+                    const userData = userDocSnapshot.data();
+                    // console.log("Fetched friend Data:", userData)
+                    // friendsDetailsArray.push(userData);
+                    const profileImageUrl = await getProfileImageUrl(friendId);
+                    friendsDetailsArray.push({ ...userData, profileImageUrl });
+                    console.log(userData, "added"); // Debug: log the added friend details
+                } else {
+                    console.log("No document found for friend ID:", friendId); // Debug: log if no document found
+                }
+            }
+            setFriendsDetails(friendsDetailsArray);
+            console.log("friendsDetailsArray", friendsDetailsArray); // Debug: log the final array before setting state
+        } catch (error) {
+            console.error('Error fetching friends details:', error);
+        }
+    };
     return (
         <div>
             {isMobileView && userData && (
@@ -295,7 +339,7 @@ export default function EditButton() {
                         )}
                         {isMobileView && userData && (
                             <div className='Trdrow_data'>
-                                <p id='fname'>{userData.fullname}</p>
+                                <p id='fname'>{userData.fullName}</p>
                                 <p id='bio'>Always on the go 🔁</p>
                             </div>
                         )}
@@ -312,11 +356,35 @@ export default function EditButton() {
                         )}
                         <div className='Sndrow_data'>
                             <p id='nposts'>{numOfPosts} posts</p>
-                            <p id='nfriends'>{friendCount} friends</p>
+                            <p id='nfriends' onClick={() => setShowFriends(true)}>{friendCount} friends</p>
+                            <Modal show={showFriends} onHide={() => setShowFriends(false)}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Friends List</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                <ul className='frilist'>
+                                        {friendsDetails.map((friend, index) => (
+                                            <li key={index} onClick={() => handleUserClick(friend)} className='frilistdata'>
+                                                <img
+                                                    src={friend.profileImageUrl || 'default-profile.png'}
+                                                    alt={friend.username || 'No Name'}
+                                                    style={{ width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px' }}
+                                                />
+                                                {friend.fullName || friend.username || 'No Name'}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button variant="secondary" onClick={() => setShowFriends(false)}>
+                                        Close
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal>
                         </div>
                         {!isMobileView && userData && (
                             <div className='Trdrow_data'>
-                                <p id='fname'>{userData.fullname}</p>
+                                <p id='fname'>{userData.fullName}</p>
                                 <p id='bio'>Always on the go 🔁</p>
                             </div>
                         )}

@@ -187,7 +187,7 @@ const FriendsPosts = () => {
                   className={`like-button`}
                   // onClick={() => handleLikeToggle(post)}
                 >
-                  <i className={post.likedBy && post.likedBy.includes(uuid) ? 'icon-park-solid--like' : 'icon-park-outline--like'} onClick={() => handleLikeToggle(post)}></i>
+                  <i className={post.likedBy && post.likedBy.includes(uuid) ? 'icon-park-solid--like' : 'icon-park-outline--like1'} onClick={() => handleLikeToggle(post)}></i>
                 </span>
                 <span className="comment-icon">
                   <i className="iconamoon--comment-thin"></i>

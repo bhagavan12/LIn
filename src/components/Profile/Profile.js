@@ -17,11 +17,16 @@ export default function Profile() {
     /*modal*/
     const [show, setShow] = useState(false);
     const [show1, setShow1] = useState(false);
+    const [showFriends, setShowFriends] = useState(false); // State to control friends modal
+    const [friends, setFriends] = useState([]); //
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const handleClose1 = () => setShow1(false);
     const handleShow1 = () => setShow1(true);
+    const handleCloseFriends = () => setShowFriends(false);
+    const handleShowFriends = () => setShowFriends(true);
     /*modal*/
+    const [friendsDetails, setFriendsDetails] = useState([]);
     const navigate = useNavigate(); // Initialize useNavigate
     const { userDataf } = useUserAuth();
     const { uploadProfileImage, uploadProgress } = useProfileImage();
@@ -94,10 +99,13 @@ export default function Profile() {
         try {
             const friendDocRef = doc(db, "friends", userId);
             const friendDocSnap = await getDoc(friendDocRef);
-
+            console.log("friendDocSnap", friendDocSnap);
             if (friendDocSnap.exists()) {
                 const friendData = friendDocSnap.data();
                 if (friendData.friends) {
+                    setFriends(friendData.friends);
+                    console.log("friends of ", userId, friendData.friends);
+                    await fetchFriendsDetails(friendData.friends);
                     return friendData.friends.length;
                 }
             }
@@ -167,6 +175,58 @@ export default function Profile() {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
+    const handleUserClick = async (user) => {
+        const { uid } = await userDataf();
+        if (uid === user.uid) {
+            navigate("/mdb");
+        } else {
+            navigate(`/userprofile/${user.uid}`, { state: { userData: user } });
+        }
+    };
+    // const fetchFriendsDetails = async (friendsList) => {
+    //     try {
+    //         const friendsDetailsArray = [];
+    //         for (const friendId of friendsList) {
+    //             const friendDocRef = doc(db, 'users', friendId);
+    //             const friendDocSnap = await getDoc(friendDocRef);
+    //             if (friendDocSnap.exists()) {
+    //                 friendsDetailsArray.push(friendDocSnap.data());
+    //                 console.log(friendDocSnap.data(),"added");
+    //             }
+    //         }
+    //         setFriendsDetails(friendsDetailsArray);
+    //         console.log("friendsDetailsArray",friendsDetails);
+    //     } catch (error) {
+    //         console.error('Error fetching friends details:', error);
+    //     }
+    // };
+    const fetchFriendsDetails = async (friendsList) => {
+        try {
+            console.log("friendsList:", friendsList); // Debug: log the input list
+            const friendsDetailsArray = [];
+            for (const friendId of friendsList) {
+                console.log("Fetching details for friend ID:", friendId); // Debug: log the friend ID
+                const q = query(collection(db, "users"), where("uid", "==", friendId));
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty) {
+                    const userDocSnapshot = querySnapshot.docs[0];
+                    const userData = userDocSnapshot.data();
+                    // console.log("Fetched friend Data:", userData)
+                    // friendsDetailsArray.push(userData);
+                    const profileImageUrl = await getProfileImageUrl(friendId);
+                    friendsDetailsArray.push({ ...userData, profileImageUrl });
+                    console.log(userData, "added"); // Debug: log the added friend details
+                } else {
+                    console.log("No document found for friend ID:", friendId); // Debug: log if no document found
+                }
+            }
+            setFriendsDetails(friendsDetailsArray);
+            console.log("friendsDetailsArray", friendsDetailsArray); // Debug: log the final array before setting state
+        } catch (error) {
+            console.error('Error fetching friends details:', error);
+        }
+    };
+
     return (
         <div>
             {isMobileView && userData && (
@@ -346,8 +406,24 @@ export default function Profile() {
                             </div>
                         )}
                         <div className='Sndrow_data'>
-                            <p id='nposts'>{numOfPosts} posts</p>
-                            <p id='nfriends'>{friendCount} friends</p>
+                            <p id='nposts' >{numOfPosts} posts</p>
+                            <p id='nfriends' onClick={() => setShowFriends(true)}>{friendCount} friends</p>
+                            <Modal show={showFriends} onHide={() => setShowFriends(false)}>
+                                <Modal.Body>
+                                    <ul className='frilist'>
+                                        {friendsDetails.map((friend, index) => (
+                                            <li key={index} onClick={() => handleUserClick(friend)} className='frilistdata'>
+                                                <img
+                                                    src={friend.profileImageUrl || 'default-profile.png'}
+                                                    alt={friend.username || 'No Name'}
+                                                    style={{ width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px' }}
+                                                />
+                                                {friend.fullName || friend.username || 'No Name'}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </Modal.Body>
+                            </Modal>
                         </div>
                         {!isMobileView && userData && (
                             <div className='Trdrow_data'>

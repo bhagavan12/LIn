@@ -265,7 +265,7 @@ import { MDBContainer, MDBRow, MDBCol, MDBCardImage } from "mdb-react-ui-kit";
 import './PostShow.css';
 import { MDBCardVideo } from 'mdbreact';
 
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
 import { ref, getDownloadURL, listAll } from "firebase/storage";
 import { storage } from "../firebase";
 import { db } from "../firebase";
@@ -282,6 +282,7 @@ const PostList = () => {
     const [modalPost, setModalPost] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [index, setIndex] = useState(0);
+    const [friendsPosts, setFriendsPosts] = useState([]);
     const [usernamee, setUsernamee] = useState(null);
     const [profileImageUrl, setProfileImageUrl] = useState(null); // State for profile image URL
     useEffect(() => {
@@ -339,6 +340,49 @@ const PostList = () => {
     const isVideoUrl = (url) => {
         return url.includes('.mp4');
     };
+    const handleLikeToggle = async (post) => {
+        const { uid, username } = await userDataf();
+        const postRef = doc(db, 'posts', post.id);
+        const updatedLikedBy = post.likedBy || [];
+
+        if (updatedLikedBy.includes(uid)) {
+            updatedLikedBy.splice(updatedLikedBy.indexOf(uid), 1);
+            await updateDoc(postRef, {
+                likes: post.likes - 1,
+                likedBy: updatedLikedBy
+            });
+            post.likes -= 1;
+        } else {
+            updatedLikedBy.push(uid);
+            await updateDoc(postRef, {
+                likes: post.likes + 1,
+                likedBy: updatedLikedBy
+            });
+            post.likes += 1;
+        }
+
+        setFriendsPosts((prevPosts) =>
+            prevPosts.map((p) => (p.id === post.id ? { ...p, likes: post.likes, likedBy: updatedLikedBy } : p))
+        );
+    };
+    const formatTimeDifference = (timestamp) => {
+        const now = Date.now();
+        const diff = now - timestamp * 1000; // Convert seconds to milliseconds
+
+        const seconds = Math.floor(diff / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        const months = Math.floor(days / 30);
+        const years = Math.floor(months / 12);
+
+        if (years > 0) return `${years} year${years > 1 ? 's' : ''} ago`;
+        if (months > 0) return `${months} month${months > 1 ? 's' : ''} ago`;
+        if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
+        if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+        if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+        return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
+    };
     return (
         <div>
             {/* <MDBContainer>
@@ -376,7 +420,7 @@ const PostList = () => {
                                     <MDBCardVideo
                                         src={post.imageuploaded[0]}
                                         // className="w-100 rounded-3"
-                                         className="posts"
+                                        className="posts"
                                         onClick={() => handlePostClick(post)}
                                     />
                                 </div>
@@ -398,46 +442,69 @@ const PostList = () => {
 
             {/* Modal using React Bootstrap */}
             <Modal show={showModal} onHide={() => setShowModal(false)} >
-                <Modal.Header closeButton>
-                    <Modal.Title className="d-flex align-items-center">
-                        <img
-                            src={profileImageUrl}
-                            className="rounded-circle mr-2"
-                            height="42"
-                            alt="Avatar"
-                            loading="lazy"
-                        />
-                        <p>{usernamee}</p>
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body >
+                {/* <Modal.Header closeButton>
                     {modalPost && (
-                        <div>
-                            <p>Date: {(new Date(modalPost.createdAt.seconds * 1000)).toLocaleString()}</p>
-                            {/* <p>Date: {formatDate(modalPost.timestamp)}</p> */}
-                            {/* Display images in a Bootstrap Carousel */}
-                            <Carousel activeIndex={index} onSelect={handleSelect}>
-                                {modalPost.imageuploaded.map((mediaUrl, idx) => (
-                                    <Carousel.Item key={idx}>
-                                        {/* <img src={image} className="d-block w-100" alt={`Post ${modalPost.id} Image ${idx}`} /> */}
-                                        {isVideoUrl(mediaUrl) ? (
-                                            <ReactPlayer url={mediaUrl} controls width="100%" height="auto" />
-                                        ) : (
-                                            <img src={mediaUrl} className="d-block w-100" alt={`Post ${modalPost.id} Image ${idx}`} />
-                                        )}
-                                    </Carousel.Item>
-                                ))}
-                            </Carousel>
-                            <h5>{modalPost.caption}</h5>
-                            <p>Likes: {modalPost.likes}</p>
-                        </div>
+                        <Modal.Title className="d-flex align-items-center">
+                            <img
+                                src={profileImageUrl}
+                                className="rounded-circle mr-2"
+                                height="45"
+                                alt="Avatar"
+                                loading="lazy"
+                            />
+                            <div style={{marginLeft:"10px",border:"1px solid black"}}>
+                            <p style={{ fontSize: "25px", marginLeft: "5px", paddingTop: "2px" }}>{usernamee}</p>
+                            <p style={{ fontSize: "15px", marginLeft: "5px", paddingTop: "5px" }}>{formatTimeDifference(modalPost.createdAt.seconds)}</p>
+                            </div>
+                        </Modal.Title>
                     )}
-                </Modal.Body>
-                <Modal.Footer>
+                </Modal.Header> */}
+                {/* <Modal.Body > */}
+                {modalPost && (
+                    <div className='' style={{padding:"5px"}}>
+                        <div className="post-header">
+                            <img src={profileImageUrl} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                            <div>
+                                <h3 id="uname">{usernamee}</h3>
+                                <h6 style={{ paddingLeft: "12px" }} id=''>{formatTimeDifference(modalPost.createdAt.seconds)}</h6>
+                                {/* <h6 id="uname">{new Date(post.createdAt.seconds * 1000).toLocaleString()}</h6> */}
+                            </div>
+                        </div>
+                        {/* <p>Date: {formatDate(modalPost.timestamp)}</p> */}
+                        {/* Display images in a Bootstrap Carousel */}
+                        <Carousel activeIndex={index} onSelect={handleSelect}>
+                            {modalPost.imageuploaded.map((mediaUrl, idx) => (
+                                <Carousel.Item key={idx}>
+                                    {/* <img src={image} className="d-block w-100" alt={`Post ${modalPost.id} Image ${idx}`} /> */}
+                                    {isVideoUrl(mediaUrl) ? (
+                                        <ReactPlayer url={mediaUrl} controls width="100%" height="auto" />
+                                    ) : (
+                                        <img src={mediaUrl} className="d-block w-100" alt={`Post ${modalPost.id} Image ${idx}`} />
+                                    )}
+                                </Carousel.Item>
+                            ))}
+                        </Carousel>
+                        <div className="like-section">
+                            <span
+                                className={`like-button`}
+                            // onClick={() => handleLikeToggle(post)}
+                            >
+                                <i className={modalPost.likedBy && modalPost.likedBy.includes(modalPost.uid) ? 'icon-park-solid--like' : 'icon-park-outline--like1'} onClick={() => handleLikeToggle(modalPost)}></i>
+                            </span>
+                            <span className="comment-icon">
+                                <i className="iconamoon--comment-thin"></i>
+                            </span>
+                        </div>
+                        <p>{modalPost.likes} Likes</p>
+                        <p><span id='uname1'>{modalPost.username}</span> {modalPost.caption}</p>
+                    </div>
+                )}
+                {/* </Modal.Body> */}
+                {/* <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowModal(false)}>
                         Close
                     </Button>
-                </Modal.Footer>
+                </Modal.Footer> */}
             </Modal>
         </div>
     );

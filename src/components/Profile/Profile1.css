@@ -598,4 +598,19 @@
 
  /*caption*/
  
+/*friedlistdata*/
+.frilist{
+  list-style-type:none;
+  /* border: 1px solid black; */
+  overflow-y: scroll;
+}
+.frilistdata{
+  margin-bottom: 10px;
+  cursor: pointer;
+  background-color: rgb(247, 242, 242);
+  border-radius: 10px;
+  /* border: 1px solid black; */
+  padding: 10px;
+}
+/*friedlistdata*/
 /*****/
