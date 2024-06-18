@@ -220,25 +220,35 @@ export default function FriendRequestsPage({userId}) {
         
                         const requestsData = snapshot.docs.map(async doc => {
                             const requestData = doc.data();
+                            console.log("requestData",requestData);
                             const senderUid = requestData.senderUid;
-        
+                            const recid=requestData.receiverUid;
                             // Fetch sender's user data
                             const senderUserData = await fetchUserData(senderUid);
                             // console.log(senderUserData)
                             console.log("senderUserData",senderUserData);
-                            return senderUserData;
-                            // return {
-                            //     dob:senderUserData.dob,
-                            //     fullName
-                            //     id: doc.id,
-                            //     senderUid: senderUid,
-                            //     senderUsername: senderUserData.username,
-                            //     senderAvatarUrl: senderUserData.profileImageUrl
-                            // };
+                            // return senderUserData;
+                            console.log("doc.id",doc.id);
+                            return {
+                                id: doc.id,
+                                recid: recid,
+                                // senderUid: senderUid,
+                                // senderUsername: senderUserData.username,
+                                // senderAvatarUrl: senderUserData.profileImageUrl
+                                username:senderUserData.username,
+                                uid:senderUid,
+                                profilephoto:senderUserData.profilephoto,
+                                profileImageUrl:senderUserData.profileImageUrl,
+                                gender:senderUserData.gender,
+                                fullName:senderUserData.fullName,
+                                email:senderUserData.email,
+                                dob:senderUserData.dob
+                            };
                         });
         
                         const friendRequestsData = await Promise.all(requestsData);
                         setFriendRequests(friendRequestsData);
+                        console.log("friendRequests",friendRequests)
                     } catch (error) {
                         console.error("Error fetching friend requests:", error);
                     }
@@ -281,11 +291,13 @@ export default function FriendRequestsPage({userId}) {
             // const senderDocRef = collection(db, 'friends').doc(senderId);
             const senderDocRef = doc(db, 'friends', senderId);
             // Update sender's 'friends' document
+            console.log("Sender Document Reference:", senderDocRef);
             await updateFriends(senderDocRef, userId);
 
             // Get receiver's document reference
             // const receiverDocRef = collection(db, 'friends').doc(userId);
             const receiverDocRef = doc(db, 'friends', userId);
+            console.log("Receiver Document Reference:", receiverDocRef);
             // Update receiver's 'friends' document
             await updateFriends(receiverDocRef, senderId);
             
@@ -294,6 +306,7 @@ export default function FriendRequestsPage({userId}) {
             if (requestId) {
                 // await deleteDoc(collection(db,'friendRequests'), requestId);
                 await deleteDoc(doc(db, "friendRequests",requestId));
+                console.log("requestId",requestId,"friendReq deleted");
             } else {
                 console.error("requestId is undefined");
             }
@@ -311,7 +324,7 @@ export default function FriendRequestsPage({userId}) {
         try {
             // Check if the document exists
             const docSnapshot = await getDoc(userDocRef);
-            
+            console.log("docSnapshot",docSnapshot)
             if (!docSnapshot.exists()) {
                 
                 await setDoc(userDocRef, {

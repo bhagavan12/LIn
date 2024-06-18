@@ -1,16 +1,16 @@
 // import React from 'react';
 import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBBtn, MDBTypography } from 'mdb-react-ui-kit';
 import React, { useState, useEffect } from "react";
-import useProfileImage from "./uploadImage";
-import { useUserAuth } from "../context/UserAuthContext";
+import useProfileImage from "../uploadImage";
+import { useUserAuth } from "../../context/UserAuthContext";
 import { ref, getDownloadURL, listAll, getMetadata } from "firebase/storage";
-import { db, storage } from "../firebase";
+import { db, storage } from "../../firebase";
 import { collection, addDoc, doc, getDoc, query, where, getDocs, deleteDoc, updateDoc, setDoc } from "firebase/firestore";
 import './mdb.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import PostShow from './PostShow';
-import UserPost from './UserPost';
+import PostShow from '../PostShow';
+import UserPost from '../UserPost';
 import { useNavigate } from "react-router-dom";
 export default function EditButton() {
   /*modal*/

@@ -529,7 +529,7 @@ const MyNavbar = () => {
                             </div>
                         )}
                     </div> */}
-                    <Link className="nav-link search-link" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSearch" aria-controls="offcanvasSearch">
+                    <Link className="nav-link" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSearch" aria-controls="offcanvasSearch">
                         <i className="mingcute--search-line"></i>
                     </Link>
 
@@ -631,6 +631,7 @@ const MyNavbar = () => {
                             </>
                         )} */}
                     </Link>
+                    
                 </div>
             </div>
         </nav>

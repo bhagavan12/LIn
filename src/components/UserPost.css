@@ -1,0 +1,137 @@
+.input {
+    max-width: 90px;
+    display: none;
+    
+  }
+  
+  .labelFile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+    width: 300px;
+    height: 120px;
+    border: 2px dashed #ccc;
+    align-items: center;
+    text-align: center;
+    padding: 5px;
+    color: #404040;
+    cursor: pointer;
+    transition: border 0.5s;
+  }
+  .labelFile:hover{
+    border:2px dashed rgb(57, 120, 255);;
+  }
+  .labelFile > p{
+    font-size: x-small;
+  }
+  .labelFile ~ p{
+    font-size: x-small;
+  }
+  .cardd{
+    border: 2px solid #e0e0e0;
+    margin: auto;
+    padding: 10px;
+    width: fit-content;
+    border-radius: 5px;
+  }
+  .btn {
+    background-color: #e0e0e0;
+    padding: 5px;
+    color: #fff;
+    /* text-transform: uppercase; */
+    /* letter-spacing: 1px; */
+    font-size: xx-small;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 2px dashed #e0e0e0;
+    /* box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px; */
+    transition: .4s;
+   }
+   
+   .btn span:last-child {
+    display: none;
+   }
+   
+   .btn:hover {
+    transition: .4s;
+    border: 2px dashed #e0e0e0;
+    background-color: #fff;
+    color: black;
+   }
+   
+   .btn:active {
+    background-color: #ddafaf;
+   }
+   
+   /*caption*/
+   .container_input {
+    margin-top:10px ;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 500px;
+    user-select: none;
+  }
+  
+  .text {
+    font-size: 0.8rem;
+    text-align: left;
+    width: 100%;
+    color: black;
+    font-weight: bold;
+    margin-bottom: 3px;
+  }
+  
+  .input1 {
+    border-radius: 8px;
+    padding: 7px 56px;
+    width: 100%;
+    box-shadow: rgba(77, 79, 82, 0.2) 0px 8px 24px;
+    border: 2px solid rgb(184, 180, 180);
+    font-size: 0.8rem;
+    outline: none;
+    transition: 0.5s ease;
+  }
+  
+  .input1:hover {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    border-color: rgb(138, 175, 255);
+  }
+  
+  .input1:focus {
+    border: 2px solid rgb(57, 120, 255);
+    box-shadow: rgba(133, 130, 130, 0.1) 0px 4px 12px;
+    transform: scale(0.99);
+  }
+  
+  .input1::placeholder {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  
+  .button_sub {
+    padding: 6px 15px;
+    text-align: center;
+    color: rgb(95, 87, 87);
+    cursor: pointer;
+    background-color: white;
+    border-radius: 6px;
+    border: none;
+    transition: 0.5s;
+    width: 100%;
+    margin-top: 7px;
+    font-size: 13px;
+    box-shadow: rgba(104, 100, 100, 0.1) 0px 4px 6px -1px, rgba(49, 42, 42, 0.06) 0px 2px 4px -1px;
+  }
+  
+  .button_sub:hover {
+    border-radius: 7px;
+    background-color: rgb(243, 242, 242);
+    border-color: rgb(236, 232, 232);
+  }
+  
+  
+  
+   /*caption*/
+   

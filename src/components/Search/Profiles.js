@@ -7,7 +7,7 @@ import useProfileImage from "../uploadImage";
 import { useUserAuth } from "../../context/UserAuthContext";
 import { ref, getDownloadURL, listAll } from "firebase/storage";
 import { storage, db } from "../../firebase";
-import '../mdb.css';
+import '../Profile/Profile1.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import SearchedProfilePost from './SearchedProfilePost';
@@ -22,6 +22,8 @@ export default function EditButton() {
     const handleShow = () => setShow(true);
     const handleClose1 = () => setShow1(false);
     const handleShow1 = () => setShow1(true);
+    // const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState("");
     // const 
     /*modal*/
     const location = useLocation(); // Get the location object
@@ -54,7 +56,8 @@ export default function EditButton() {
     const [selectedFile, setSelectedFile] = useState(null);
     const [profileImageUrl, setProfileImageUrl] = useState(null); // State for profile image URL
     const [isFriend, setIsFriend] = useState(false);
-
+    const [friendCount, setFriendCount] = useState(0); // State for friend count
+    const [numOfPosts, setNumOfPosts] = useState(0);
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -64,11 +67,15 @@ export default function EditButton() {
                     setUserData(state.userData);
                 }
                 setUserData(state.userData);
-                console.log("userData.userData",state.userData);
+                console.log("userData.userData", state.userData);
 
                 // Fetch and set profile image URL
                 const imageUrl = await getProfileImageUrl(userId);
                 setProfileImageUrl(imageUrl);
+                const friendsCount = await getFriendCount(userId);
+                setFriendCount(friendsCount);
+                const postsCount = await getPostsCount(userId);
+                setNumOfPosts(postsCount);
 
             } catch (error) {
                 console.error("Error fetching user data:", error);
@@ -109,6 +116,7 @@ export default function EditButton() {
             const existingFriendship = await checkFriendship(senderId, receiverId);
             if (existingFriendship) {
                 console.log("Friendship already exists or a friend request has been sent previously.");
+                showToast("Friendship already exists or a friend request has been sent previously.");
                 return;
             }
 
@@ -119,8 +127,10 @@ export default function EditButton() {
                 status: 'pending'
             });
             console.log("Friend request sent successfully!");
+            showToast("Friend request sent successfully!");
         } catch (error) {
             console.error("Error sending follow request:", error);
+            showToast("Error sending follow request.");
         }
     };
 
@@ -160,23 +170,7 @@ export default function EditButton() {
             return false;
         }
     };
-    // const sendFollowRequest = async (senderId, receiverId) => {
-    //     if (!senderId || !receiverId) {
-    //         console.error("Error sending follow request: Invalid senderId or receiverId", senderId.uid, receiverId);
-    //         return;
-    //     }
 
-    //     try {
-    //         await addDoc(collection(db, 'friendRequests'), {
-    //             senderUid: senderId,
-    //             receiverUid: receiverId,
-    //             status: 'pending'
-    //         });
-    //         console.log("Friend request sent successfully!");
-    //     } catch (error) {
-    //         console.error("Error sending follow request:", error);
-    //     }
-    // };
 
     const checkIfFriend = async (userId, receiverId) => {
         try {
@@ -198,11 +192,13 @@ export default function EditButton() {
                 // If already friends, perform unfollow action
                 await removeFriend(senderId, receiverId);
                 console.log("Unfollow action here");
+                showToast("Unfollowed successfully!");
             } else {
                 await sendFollowRequest(senderId, receiverId);
             }
         } catch (error) {
             console.error("Error handling button click:", error);
+            showToast("Error handling button click.");
         }
     };
     const removeFriend = async (userId, friendId) => {
@@ -227,78 +223,134 @@ export default function EditButton() {
             }
         } catch (error) {
             console.error("Error removing friend:", error);
+            showToast("Error removing friend.");
         }
     };
+    const getFriendCount = async (userId) => {
+        try {
+            const friendDocRef = doc(db, "friends", userId);
+            const friendDocSnap = await getDoc(friendDocRef);
 
+            if (friendDocSnap.exists()) {
+                const friendData = friendDocSnap.data();
+                if (friendData.friends) {
+                    return friendData.friends.length;
+                }
+            }
+            return 0;
+        } catch (error) {
+            console.error("Error fetching friend count:", error);
+            return 0;
+        }
+    };
+    const getPostsCount = async (userId) => {
+        try {
+            const postsQuery = query(collection(db, "posts"), where("uid", "==", userId));
+            const querySnapshot = await getDocs(postsQuery);
+            console.log("querySnapshot friend", querySnapshot);
+            const numPosts = querySnapshot.size; // Count the number of documents returned
+            return numPosts;
+        } catch (error) {
+            console.error("Error fetching posts count:", error);
+            return 0;
+        }
+    };
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 600);
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobileView(window.innerWidth <= 600);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+    const showToast = (message) => {
+        setToastMessage(message);
+        setTimeout(() => {
+            setToastMessage("");
+        }, 5000); // Hide toast after 5 seconds
+    };
     return (
-        <div className="gradient-custom-2" style={{ backgroundColor: 'whitesmoke' }}>
-            <MDBContainer className="py-5 h-100">
-                <MDBRow className="justify-content-center align-items-center h-100">
-                    <MDBCol lg="11" xl="11">
-                        <MDBCard>
-                            <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '200px' }}>
-                                <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '150px' }}>
-                                    {profileImageUrl ? (
-                                        <MDBCardImage
-                                            src={profileImageUrl || 'placeholder_image_url'} // Use a placeholder image URL or default image if profileImageUrl is null
-                                            alt="Profile"
-                                            className="mt-4 mb-2 img-thumbnail"
-                                            fluid
-                                            style={{
-                                                width: '200px', // Set the fixed width for the profile image container
-                                                height: '150px', // Set the fixed height for the profile image container
-                                                objectFit: 'contain', // Ensure the image covers the entire container
-                                                objectPosition: 'center', // Center the image within the container
-                                                zIndex: '1'
-                                            }}
-                                        />
-                                    ) : (
-                                        <div className="" style={{ width: "200px", height: "150px" }}>No Profile Image</div>
-                                    )}
+        <div>
+            {isMobileView && userData && (
+                <div className='Fstrow_data'>
+                    <p id='uname'>{userData.username}</p>
+                    <button type="button" className='pbutton' onClick={() => handleButtonClick(senderid.uid, userId)}>{isFriend ? "Unfollow" : "Send Request"}</button>
+                    <button type="button" className='pbutton' >Message</button>
+                    <i className='system-uicons--settings' id='iconsett'></i>
 
-                                    {/* <div style={{ display: 'flex' }}>
-                                        <MDBBtn outline color="dark" style={{ height: '36px', width: '240px', overflow: 'visible', flex: '1', marginRight: '30px' }} onClick={() => handleButtonClick(senderid.uid, userId)}>
-                                            {isFriend ? "Unfollow" : "Send Request"}
-                                        </MDBBtn>
-                                    </div> */}
-                                    <div style={{ display: 'flex' }}>
-                                        <MDBBtn outline color="dark" style={{ height: '36px', width: '240px', overflow: 'visible', flex: '1', marginRight: '30px' }} onClick={() => handleButtonClick(senderid.uid, userId)}>
-                                            {isFriend ? "Unfollow" : "Send Request"}
-                                        </MDBBtn>
-                                    </div>
-                                </div>
-                                {userData && (
-                                    <div className="ms-3" style={{ marginTop: '100px' }}>
-                                        <MDBTypography tag="h5">{userData.username}</MDBTypography>
-                                        <MDBTypography>{userData.fullName}</MDBTypography>
-                                        <MDBCardText >{userData.email}</MDBCardText>
-                                    </div>
-                                )}
-                            </div>
 
-                            <div className="p-4 text-black" style={{ backgroundColor: '#f8f9fa' }}>
-                                <div className="d-flex justify-content-end text-center py-1">
-                                    <div>
-                                        <MDBCardText className="mb-1 h5">253</MDBCardText>
-                                        <MDBCardText className="small text-muted mb-0">Photos</MDBCardText>
-                                    </div>
-                                    <div className="px-3">
-                                        <MDBCardText className="mb-1 h5">1026</MDBCardText>
-                                        <MDBCardText className="small text-muted mb-0">Followers</MDBCardText>
-                                    </div>
-                                    <div>
-                                        <MDBCardText className="mb-1 h5">478</MDBCardText>
-                                        <MDBCardText className="small text-muted mb-0">Following</MDBCardText>
-                                    </div>
-                                </div>
+                </div>
+            )}
+            {userData ? (
+                <div className='profile_box'>
+                    <div className='profile_container'>
+                        {profileImageUrl ? (
+                            <div className='proimg' style={{ backgroundImage: `url(${profileImageUrl})` }} />
+                        ) : (
+                            <div className="" style={{ width: "200px", height: "150px" }}>No Profile Image</div>
+                        )}
+                        {isMobileView && userData && (
+                            <div className='Trdrow_data'>
+                                <p id='fname'>{userData.fullname}</p>
+                                <p id='bio'>Always on the go 🔁</p>
                             </div>
-                            <MDBCardBody className="text-black p-4">
-                                <SearchedProfilePost location={location} userId={userId} />
-                            </MDBCardBody>
-                        </MDBCard>
-                    </MDBCol>
-                </MDBRow>
-            </MDBContainer>
+                        )}
+                    </div>
+
+                    <div className='profile_data'>
+                        {!isMobileView && userData && (
+                            <div className='Fstrow_data'>
+                                <p id='uname'>{userData.username}</p>
+                                <button type="button" className='pbutton' onClick={() => handleButtonClick(senderid.uid, userId)}>{isFriend ? "Unfollow" : "Send Request"}</button>
+                                <button type="button" className='pbutton' >Message</button>
+                                <i className='system-uicons--settings' id='iconsett'></i>
+                            </div>
+                        )}
+                        <div className='Sndrow_data'>
+                            <p id='nposts'>{numOfPosts} posts</p>
+                            <p id='nfriends'>{friendCount} friends</p>
+                        </div>
+                        {!isMobileView && userData && (
+                            <div className='Trdrow_data'>
+                                <p id='fname'>{userData.fullname}</p>
+                                <p id='bio'>Always on the go 🔁</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            ) : (
+                <div class="card">
+                    <div class="card_load"></div>
+                    <div class="card_load_extreme_title"></div>
+                    <div class="card_load_extreme_descripion"></div>
+                </div>
+            )}
+            <div
+                className={`toast align-items-center text-white bg-secondary border-0 position-fixed top-0 end-0 m-3 ${toastMessage ? "show" : ""
+                    }`}
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+            >
+                <div className="d-flex">
+                    <div className="toast-body">{toastMessage}</div>
+                    <button
+                        type="button"
+                        className="btn-close me-2 m-auto"
+                        data-bs-dismiss="toast"
+                        aria-label="Close"
+                        onClick={() => setToastMessage("")}
+                    ></button>
+                </div>
+            </div>
+
+            <div className=''>
+                <SearchedProfilePost location={location} userId={userId} />
+            </div>
         </div>
     );
 }

@@ -38,7 +38,7 @@ export function UserAuthContextProvider({ children }) {
     } else {
       const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
         setUser(currentUser);
-        if (currentUser) {
+        if (currentUser) {  
           await fetchUserData(currentUser.email);
         }
       });
