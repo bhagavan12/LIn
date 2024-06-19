@@ -25,6 +25,7 @@ export default function EditButton() {
     const handleShow1 = () => setShow1(true);
     // const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
+    
     // const 
     /*modal*/
     const [friendsDetails, setFriendsDetails] = useState([]);

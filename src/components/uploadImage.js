@@ -97,8 +97,8 @@ function useProfileImage() {
 
       // Update Firestore document with profile URL
       const userDocRef = doc(db, "users", userId);
-      await updateDoc(userDocRef, { profileurl: downloadURL });
-
+      await updateDoc(userDocRef, { profilephoto: downloadURL });
+      console.log("downloadURL",downloadURL);
       return downloadURL; // Return the download URL for display or further use
     } catch (error) {
       console.error("Error uploading profile image:", error);

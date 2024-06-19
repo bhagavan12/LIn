@@ -12,6 +12,7 @@ import Modal from 'react-bootstrap/Modal';
 import PostShow from '../PostShow';
 import UserPost from '../UserPost';
 import { useNavigate } from "react-router-dom";
+
 export default function Profile() {
     /*from mdbprofile*/
     /*modal*/
@@ -25,6 +26,7 @@ export default function Profile() {
     const handleShow1 = () => setShow1(true);
     const handleCloseFriends = () => setShowFriends(false);
     const handleShowFriends = () => setShowFriends(true);
+
     /*modal*/
     const [friendsDetails, setFriendsDetails] = useState([]);
     const navigate = useNavigate(); // Initialize useNavigate
@@ -35,6 +37,7 @@ export default function Profile() {
     const [profileImageUrl, setProfileImageUrl] = useState(null); // State for profile image URL
     const [friendCount, setFriendCount] = useState(0); // State for friend count
     const [numOfPosts, setNumOfPosts] = useState(0);
+    const [toastMessage, setToastMessage] = useState("");
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -66,8 +69,13 @@ export default function Profile() {
                 const downloadURL = await uploadProfileImage(userData.uid, selectedFile);
                 console.log("Profile Image URL:", downloadURL);
                 setProfileImageUrl(downloadURL); // Update profile image URL after upload
+                if (downloadURL) {
+                    showToast("Profile image uploaded successfully!");
+                    console.log("Profile image uploaded successfully!");
+                }
             } catch (error) {
                 console.error("Error uploading profile image:", error);
+                showToast("Failed to upload profile image.");
             }
         }
     };
@@ -226,7 +234,12 @@ export default function Profile() {
             console.error('Error fetching friends details:', error);
         }
     };
-
+    const showToast = (message) => {
+        setToastMessage(message);
+        setTimeout(() => {
+            setToastMessage("");
+        }, 5000); // Hide toast after 5 seconds
+    };
     return (
         <div>
             {isMobileView && userData && (
@@ -297,6 +310,8 @@ export default function Profile() {
                                     <p>Drag and drop your image here or click to select image!</p>
                                 </label>
                                 <input className="input" name="text" id="file" type="file" onChange={handleFileChange} />
+                                {uploadProgress > 0 && <p>Upload Progress: {uploadProgress.toFixed(2)}%</p>}
+                                <div className="loader" style={{ width: `${uploadProgress}%` }}></div>
                                 <p>
                                     <button class="button_sub" onClick={handleUpload}>Upload</button>
                                 </p>
@@ -440,6 +455,24 @@ export default function Profile() {
                     <div class="card_load_extreme_descripion"></div>
                 </div>
             )}
+            <div
+                className={`toast align-items-center text-white bg-secondary border-0 position-fixed top-0 end-0 m-3 ${toastMessage ? "show" : ""
+                    }`}
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+            >
+                <div className="d-flex">
+                    <div className="toast-body">{toastMessage}</div>
+                    <button
+                        type="button"
+                        className="btn-close me-2 m-auto"
+                        data-bs-dismiss="toast"
+                        aria-label="Close"
+                        onClick={() => setToastMessage("")}
+                    ></button>
+                </div>
+            </div>
             <div className=''>
                 <PostShow />
             </div>

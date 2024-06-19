@@ -397,7 +397,13 @@ const PostForm = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadedUrls, setUploadedUrls] = useState([]);
-
+  const [toastMessage, setToastMessage] = useState("");
+  const showToast = (message) => {
+    setToastMessage(message);
+    setTimeout(() => {
+        setToastMessage("");
+    }, 5000); // Hide toast after 5 seconds
+};
   const handleFileChange = (e) => {
     setSelectedFiles([...e.target.files]); // Update as an array using spread operator
   };
@@ -422,16 +428,20 @@ const PostForm = () => {
           },
           (error) => {
             console.error("Error uploading image:", error);
+            showToast("Error uploading image.")
           },
           async () => {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
             urls.push(downloadURL);
             setUploadedUrls([...urls]); // Update state with new array reference
+            showToast("Image uploaded successfully!")
+            
           }
         );
       }
     } catch (error) {
       console.error("Error uploading images:", error);
+      showToast("Error uploading images.")
     }
   };
 
@@ -460,9 +470,11 @@ const PostForm = () => {
       setSelectedFiles([]);
       setUploadProgress(0);
       setUploadedUrls([]);
+      showToast("Post created successfully!")
       console.log("Post created with ID: ", docRef.id);
     } catch (error) {
       console.error("Error creating post:", error);
+      showToast("Error creating post.")
     }
   };
 
@@ -476,6 +488,7 @@ const PostForm = () => {
         null,
         (error) => {
           console.error("Error uploading image:", error);
+          showToast("Error uploading image")
           reject(error);
         },
         async () => {
@@ -562,6 +575,8 @@ const PostForm = () => {
         <p>Upload Images then type caption
           <button class="button_sub" onClick={handleUpload}>Upload</button>
         </p>
+        {uploadProgress > 0 && <p>Upload Progress: {uploadProgress.toFixed(2)}%</p>}
+        <div className="loaderp" style={{ width: `${uploadProgress}%` }}></div>
         <div class="container_input" action="#">
           <input placeholder="Type caption" class="input1" name="text" type="text" value={caption} onChange={(e) => setCaption(e.target.value)} />
           <button class="button_sub" type="submit" onClick={handleSubmit}>submit</button>
