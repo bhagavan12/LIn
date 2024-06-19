@@ -70,12 +70,12 @@ export default function Profile() {
                 console.log("Profile Image URL:", downloadURL);
                 setProfileImageUrl(downloadURL); // Update profile image URL after upload
                 if (downloadURL) {
-                    showToast("Profile image uploaded successfully!");
+                    // showToast("Profile image uploaded successfully!");
                     console.log("Profile image uploaded successfully!");
                 }
             } catch (error) {
                 console.error("Error uploading profile image:", error);
-                showToast("Failed to upload profile image.");
+                // showToast("Failed to upload profile image.");
             }
         }
     };
@@ -234,12 +234,14 @@ export default function Profile() {
             console.error('Error fetching friends details:', error);
         }
     };
+    /*no use*/
     const showToast = (message) => {
         setToastMessage(message);
         setTimeout(() => {
             setToastMessage("");
         }, 5000); // Hide toast after 5 seconds
     };
+    /*no use*/
     return (
         <div>
             {isMobileView && userData && (
@@ -310,10 +312,10 @@ export default function Profile() {
                                     <p>Drag and drop your image here or click to select image!</p>
                                 </label>
                                 <input className="input" name="text" id="file" type="file" onChange={handleFileChange} />
-                                {uploadProgress > 0 && <p>Upload Progress: {uploadProgress.toFixed(2)}%</p>}
-                                <div className="loader" style={{ width: `${uploadProgress}%` }}></div>
                                 <p>
                                     <button class="button_sub" onClick={handleUpload}>Upload</button>
+                                    {uploadProgress > 0 && <p>Upload Progress: {uploadProgress.toFixed(2)}%</p>}
+                                    <div className="loaderp" style={{ width: `${uploadProgress}%` }}></div>
                                 </p>
                             </div>
                             {/* <button onClick={handleUpload}>Edit</button> */}
@@ -412,6 +414,8 @@ export default function Profile() {
                                                 <p>Drag and drop your image here or click to select image!</p>
                                             </label>
                                             <input className="input" name="text" id="file" type="file" onChange={handleFileChange} />
+                                            {uploadProgress > 0 && <p>Upload Progress: {uploadProgress.toFixed(2)}%</p>}
+                                            <div className="loaderp" style={{ width: `${uploadProgress}%` }}></div>
                                             <p>
                                                 <button class="button_sub" onClick={handleUpload}>Upload</button>
                                             </p>

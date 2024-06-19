@@ -124,7 +124,20 @@
     font-size: 13px;
     box-shadow: rgba(104, 100, 100, 0.1) 0px 4px 6px -1px, rgba(49, 42, 42, 0.06) 0px 2px 4px -1px;
   }
-  
+  .button_sub_green {
+    padding: 6px 15px;
+    text-align: center;
+    color: rgb(95, 87, 87);
+    cursor: pointer;
+    border-radius: 6px;
+    border: none;
+    transition: 0.5s;
+    width: 100%;
+    margin-top: 7px;
+    font-size: 13px;
+    box-shadow: rgba(104, 100, 100, 0.1) 0px 4px 6px -1px, rgba(49, 42, 42, 0.06) 0px 2px 4px -1px;
+    background-color: green;
+  }
   .button_sub:hover {
     border-radius: 7px;
     background-color: rgb(243, 242, 242);

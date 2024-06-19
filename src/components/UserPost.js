@@ -398,6 +398,7 @@ const PostForm = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadedUrls, setUploadedUrls] = useState([]);
   const [toastMessage, setToastMessage] = useState("");
+  const [postCreated, setPostCreated] = useState(false); // New state for post creation
   const showToast = (message) => {
     setToastMessage(message);
     setTimeout(() => {
@@ -434,14 +435,14 @@ const PostForm = () => {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
             urls.push(downloadURL);
             setUploadedUrls([...urls]); // Update state with new array reference
-            showToast("Image uploaded successfully!")
+            // showToast("Image uploaded successfully!")
             
           }
         );
       }
     } catch (error) {
       console.error("Error uploading images:", error);
-      showToast("Error uploading images.")
+      // showToast("Error uploading images.")
     }
   };
 
@@ -470,11 +471,15 @@ const PostForm = () => {
       setSelectedFiles([]);
       setUploadProgress(0);
       setUploadedUrls([]);
-      showToast("Post created successfully!")
+      setPostCreated(true); // Set postCreated to true
+      // showToast("Post created successfully!")
       console.log("Post created with ID: ", docRef.id);
+      setTimeout(() => {
+        setPostCreated(false); // Reset postCreated after some time
+      }, 5000);
     } catch (error) {
       console.error("Error creating post:", error);
-      showToast("Error creating post.")
+      // showToast("Error creating post.")
     }
   };
 
@@ -488,7 +493,7 @@ const PostForm = () => {
         null,
         (error) => {
           console.error("Error uploading image:", error);
-          showToast("Error uploading image")
+          // showToast("Error uploading image")
           reject(error);
         },
         async () => {
@@ -579,7 +584,9 @@ const PostForm = () => {
         <div className="loaderp" style={{ width: `${uploadProgress}%` }}></div>
         <div class="container_input" action="#">
           <input placeholder="Type caption" class="input1" name="text" type="text" value={caption} onChange={(e) => setCaption(e.target.value)} />
-          <button class="button_sub" type="submit" onClick={handleSubmit}>submit</button>
+          <button className={`button_sub ${postCreated ? 'button_sub_green' : ''}`} type="submit" onClick={handleSubmit}>
+            {postCreated ? 'Post Created!' : 'Submit'}
+          </button>
         </div>
       </div>
     </div>
