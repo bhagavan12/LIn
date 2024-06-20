@@ -22,7 +22,7 @@
   
   #usernameField:focus,
   #usernameField:valid {
-    border: 2px solid rgb(152, 88, 255);
+    border: 2px solid rgb(0, 0, 0);
     transition-duration: .2s;
   }
   
@@ -34,9 +34,12 @@
   }
   .searched{
     cursor: pointer;
-    background-color: rgb(247, 242, 242);
     border-radius: 10px;
     /* border: 1px solid black; */
+    transition:background-color 0.5s;
     padding: 10px;
+  }
+  .searched:hover{
+    background-color: #e9ebec;
   }
   /*searchlist*/

@@ -492,7 +492,19 @@ const MyNavbar = () => {
 
     const [showSidebar, setShowSidebar] = useState(true);
     const [showSearch, setShowSearch] = useState(false);
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 600);
 
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobileView(window.innerWidth <= 600);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
     const toggleSidebar = () => {
         setShowSidebar(!showSidebar);
     };
@@ -533,7 +545,7 @@ const MyNavbar = () => {
                         <i className="mingcute--search-line"></i>
                     </Link>
 
-                    <div className="offcanvas offcanvas-start" data-bs-scroll="true" tabIndex="-1" id="offcanvasSearch" aria-labelledby="offcanvasSearchLabel">
+                    <div className={`offcanvas offcanvas-start ${!isMobileView ? "canvao":''}`} data-bs-backdrop="false" data-bs-scroll="true" tabIndex="-1" id="offcanvasSearch" aria-labelledby="offcanvasSearchLabel">
                         <div className="offcanvas-header">
                             <h5 className="offcanvas-title" id="offcanvasSearchLabel">Search</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>

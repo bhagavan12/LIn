@@ -287,3 +287,10 @@
 
   /*tooltip*/
   /*tooltip*/
+  /*canvas*/
+  .canvao{
+    border-radius: 15px;
+    width: fit-content;
+    margin-left: 80px;
+  }
+  /*canvas*/

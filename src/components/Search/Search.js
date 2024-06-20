@@ -351,14 +351,14 @@ const Search = ({ onClose }) => { // Accept onClose as a prop
                 onChange={handleSearchChange}
             />
             {searchResults.length > 0 && (
-                <ul className="searchlist">
+                <div className="searchlist">
                     {searchResults.map((user) => (
                         <li key={user.uid} onClick={() => handleUserClick(user)} className="searched">
                             <img src={user.profileimg} alt="Avatar" style={{ width: '50px', height: '50px', borderRadius: '50%', marginRight: '20px' }} />
                             {user.username}
                         </li>
                     ))}
-                </ul>
+                </div>
             )}
         </div>
     );
