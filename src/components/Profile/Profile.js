@@ -26,7 +26,8 @@ export default function Profile() {
     const handleShow1 = () => setShow1(true);
     const handleCloseFriends = () => setShowFriends(false);
     const handleShowFriends = () => setShowFriends(true);
-
+    // const handleCloseSettings = () => setShowSettings(false);
+    // const handleShowSettings = () => setShowSettings(true);
     /*modal*/
     const [friendsDetails, setFriendsDetails] = useState([]);
     const navigate = useNavigate(); // Initialize useNavigate
@@ -38,6 +39,8 @@ export default function Profile() {
     const [friendCount, setFriendCount] = useState(0); // State for friend count
     const [numOfPosts, setNumOfPosts] = useState(0);
     const [toastMessage, setToastMessage] = useState("");
+    // const [newFullName, setNewFullName] = useState("");
+    const [newBio, setNewBio] = useState("");
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -241,7 +244,92 @@ export default function Profile() {
             setToastMessage("");
         }, 5000); // Hide toast after 5 seconds
     };
+
+    const [showSettingsModal, setShowSettingsModal] = useState(false);
+    const [username, setUsername] = useState("");
+    const [fullname, setFullName] = useState("");
+    const [email, setEmail] = useState("");
+    const [dob, setDob] = useState("");
+    const [uidd, setUserId] = useState("");
+    const [bio, setBio] = useState("");
+    const [editField, setEditField] = useState(null); // State to track which field is being edited
+    const [updated, setUpdated] = useState("")
     /*no use*/
+    useEffect(() => {
+        if (userData) {
+            setUsername(userData.username || "");
+            setFullName(userData.fullName || "");
+            setEmail(userData.email || "");
+            setDob(userData.dob || "");
+            setUserId(userData.uid || "");
+            setBio(userData.bio || "");
+            console.log("userData", userData, "userData");
+        }
+    }, [userData, showSettingsModal]);
+    const fetchUserDocumentId = async (uid) => {
+        try {
+            const q = query(collection(db, "users"), where("uid", "==", uid));
+            const querySnapshot = await getDocs(q);
+            if (!querySnapshot.empty) {
+                const doc = querySnapshot.docs[0];
+                return doc.id;
+            } else {
+                console.error("No document found for the given UID.");
+                return null;
+            }
+        } catch (error) {
+            console.error("Error fetching user document:", error);
+            return null;
+        }
+    };
+    const handleUpdateUser = async (field, value) => {
+        if (userData && uidd && value.trim() !== "") {
+            try {
+                const documentId = await fetchUserDocumentId(uidd);
+                if (documentId) {
+                    const userDocRef = doc(db, "users", documentId); // Use the fetched document ID
+                    console.log("Updating document:", userDocRef.path);
+                    console.log("Field:", field, "Value:", value);
+                    // await updateDoc(userDocRef, { [field]: value });
+                    await setDoc(userDocRef, { [field]: value }, { merge: true });
+                    console.log(`${field}=${value} updated successfully!`);
+                    setUserData((prevData) => ({ ...prevData, [field]: value }));
+                    handleCloseSettingsModal();
+                    setEditField(null); // Reset edit field state
+                }
+            } catch (error) {
+                console.error(`Error updating ${field}:`, error);
+            }
+        } else {
+            console.warn("User data is not available or value is empty");
+        }
+    };
+
+    // const handleUpdateUser = async (field, value) => {
+    //     if (userData && value.trim() !== "") {
+    //         try {
+    //             const userDocRef = doc(db, "users",uidd);
+    //             const docSnapshot = await getDoc(userDocRef);
+    //             console.log("docSnapshot",docSnapshot)
+    //             if (docSnapshot.exists()) {
+    //                 await updateDoc(userDocRef, { "username": value });
+    //                 console.log(`${field}=${value} updated successfully!`);
+    //              }
+    //             //  else {
+    //             //     await setDoc(userDocRef, { [field]: value }, { merge: true });
+    //             // }
+    //             // Optionally update local state if necessary
+    //             setUserData((prevData) => ({ ...prevData, [field]: value }));
+    //             handleCloseSettingsModal();
+    //             setEditField(null); // Reset edit field state
+    //             setUserId("");
+    //         } catch (error) {
+    //             console.error(`Error updating ${field}:`, error);
+    //         }
+    //     }
+    // };
+    const handleCloseSettingsModal = () => setShowSettingsModal(false);
+    const handleShowSettingsModal = () => setShowSettingsModal(true);
     return (
         <div>
             {isMobileView && userData && (
@@ -249,7 +337,111 @@ export default function Profile() {
                     <p id='uname'>{userData.username}</p>
                     <button type="button" className='pbutton' onClick={handleShow}>Edit Profile</button>
                     <button type="button" className='pbutton' onClick={handleShow1}>Add Post</button>
-                    <i className='system-uicons--settings' id='iconsett'></i>
+                    <i className='system-uicons--settings' id='iconsett' onClick={handleShowSettingsModal} style={{ cursor: "pointer" }}></i>
+                    <div style={{ display: 'flex' }}>
+
+                        <Modal show={showSettingsModal} onHide={handleCloseSettingsModal}>
+                            {/* <Modal.Header closeButton>
+                                <Modal.Title>Posting</Modal.Title>
+                            </Modal.Header> */}
+                            <Modal.Body className='frilist'>
+                                <div className='frilistdata' >
+                                    <p style={{ display: "flex" }}>
+                                        Edit Username: {userData.username}
+                                        <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('username')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1"></i>
+                                    </p>
+                                    {/* {editField === 'username' && ( */}
+                                    <div className="collapse" id="multiCollapseExample1">
+                                        <input
+                                            type="text"
+                                            value={username}
+                                            onChange={(e) => setUsername(e.target.value)}
+                                            placeholder="Enter new username"
+                                            className='input1'
+                                        />
+                                        <button onClick={() => handleUpdateUser("username", username)} className='button_sub'>Update</button>
+                                    </div>
+                                    {/* )} */}
+                                </div>
+                                <div className='frilistdata'>
+                                    {/* <p onClick={() => setEditField('fullName')}>Edit Full Name: {userData.fullName}</p> */}
+                                    <p style={{ display: "flex" }}>
+                                        Edit Full Name: {userData.fullName}
+                                        <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('fullName')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample2" role="button" aria-expanded="false" aria-controls="multiCollapseExample2"></i>
+                                    </p>
+                                    {/* {editField === 'fullName' && ( */}
+                                    <div className="collapse multi-collapse" id="multiCollapseExample2">
+                                        <input
+                                            type="text"
+                                            value={fullname}
+                                            onChange={(e) => setFullName(e.target.value)}
+                                            placeholder="Enter new full name"
+                                            className='input1'
+                                        />
+                                        <button onClick={() => handleUpdateUser("fullName", fullname)} className='button_sub'>Update</button>
+                                    </div>
+                                    {/* )} */}
+                                </div>
+                                <div className='frilistdata'>
+                                    {/* <p onClick={() => setEditField('email')}>Edit Email: {userData.email}</p> */}
+                                    <p style={{ display: "flex" }}>
+                                        Edit Email: {userData.email}
+                                        <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('email')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample3" role="button" aria-expanded="false" aria-controls="multiCollapseExample3"></i>
+                                    </p>
+                                    {/* {editField === 'email' && ( */}
+                                    <div className="collapse multi-collapse" id="multiCollapseExample3">
+                                        <input
+                                            type="email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            placeholder="Enter new email"
+                                            className='input1'
+                                        />
+                                        <button onClick={() => handleUpdateUser("email", email)} className='button_sub'>Update</button>
+                                    </div>
+                                    {/* )} */}
+                                </div>
+                                <div className='frilistdata'>
+                                    {/* <p onClick={() => setEditField('dob')}>Edit Date of Birth: {userData.dob}</p> */}
+                                    <p style={{ display: "flex" }}>
+                                        Edit Date of Birth: {userData.dob}
+                                        <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('dob')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample4" role="button" aria-expanded="false" aria-controls="multiCollapseExample4"></i>
+                                    </p>
+                                    {/* {editField === 'dob' && ( */}
+                                    <div className="collapse multi-collapse" id="multiCollapseExample4">
+                                        <input
+                                            type="date"
+                                            value={dob}
+                                            onChange={(e) => setDob(e.target.value)}
+                                            placeholder="Enter new date of birth"
+                                            className='input1'
+                                        />
+                                        <button onClick={() => handleUpdateUser("dob", dob)} className='button_sub'>Update</button>
+                                    </div>
+                                    {/* )} */}
+                                </div>
+                                <div className='frilistdata'>
+                                    {/* <p onClick={() => setEditField('bio')}>Edit bio: {userData.bio || "bio"}</p> */}
+                                    <p style={{ display: "flex" }}>
+                                        Edit bio: {userData.bio || "bio"}
+                                        <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('bio')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample5" role="button" aria-expanded="false" aria-controls="multiCollapseExample5"></i>
+                                    </p>
+                                    {/* {editField === 'bio' && ( */}
+                                    <div className="collapse multi-collapse" id="multiCollapseExample5">
+                                        <input
+                                            type="text"
+                                            value={bio || "bio"}
+                                            onChange={(e) => setBio(e.target.value)}
+                                            placeholder="Enter new bio"
+                                            className='input1'
+                                        />
+                                        <button onClick={() => handleUpdateUser("bio", bio)} className='button_sub'>Update</button>
+                                    </div>
+                                    {/* )} */}
+                                </div>
+                            </Modal.Body>
+                        </Modal>
+                    </div>
                     <div style={{ display: 'flex' }}>
 
                         <Modal show={show1} onHide={handleClose1}>
@@ -336,7 +528,7 @@ export default function Profile() {
                         {isMobileView && userData && (
                             <div className='Trdrow_data'>
                                 <p id='fname'>{userData.fullName}</p>
-                                <p id='bio'>{users.bio}</p>
+                                <p id='bio'>{userData.bio || "bio"}</p>
                             </div>
                         )}
                     </div>
@@ -351,7 +543,111 @@ export default function Profile() {
                                     <div class="add-icon"></div>
                                     <div class="btn-txt">Add Post</div>
                                 </button>
-                                <i className='system-uicons--settings' id='iconsett'></i>
+                                <i className='system-uicons--settings' id='iconsett' onClick={handleShowSettingsModal} style={{ cursor: "pointer" }}></i>
+                                <div style={{ display: 'flex' }}>
+
+                                    <Modal show={showSettingsModal} onHide={handleCloseSettingsModal}>
+                                        {/* <Modal.Header closeButton>
+                                <Modal.Title>Posting</Modal.Title>
+                            </Modal.Header> */}
+                                        <Modal.Body className='frilist'>
+                                            <div className='frilistdata' >
+                                                <p style={{ display: "flex" }}>
+                                                    Edit Username: {userData.username}
+                                                    <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('username')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1"></i>
+                                                </p>
+                                                {/* {editField === 'username' && ( */}
+                                                <div className="collapse" id="multiCollapseExample1">
+                                                    <input
+                                                        type="text"
+                                                        value={username}
+                                                        onChange={(e) => setUsername(e.target.value)}
+                                                        placeholder="Enter new username"
+                                                        className='input1'
+                                                    />
+                                                    <button onClick={() => handleUpdateUser("username", username)} className='button_sub'>Update</button>
+                                                </div>
+                                                {/* )} */}
+                                            </div>
+                                            <div className='frilistdata'>
+                                                {/* <p onClick={() => setEditField('fullName')}>Edit Full Name: {userData.fullName}</p> */}
+                                                <p style={{ display: "flex" }}>
+                                                    Edit Full Name: {userData.fullName}
+                                                    <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('fullName')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample2" role="button" aria-expanded="false" aria-controls="multiCollapseExample2"></i>
+                                                </p>
+                                                {/* {editField === 'fullName' && ( */}
+                                                <div className="collapse multi-collapse" id="multiCollapseExample2">
+                                                    <input
+                                                        type="text"
+                                                        value={fullname}
+                                                        onChange={(e) => setFullName(e.target.value)}
+                                                        placeholder="Enter new full name"
+                                                        className='input1'
+                                                    />
+                                                    <button onClick={() => handleUpdateUser("fullName", fullname)} className='button_sub'>Update</button>
+                                                </div>
+                                                {/* )} */}
+                                            </div>
+                                            <div className='frilistdata'>
+                                                {/* <p onClick={() => setEditField('email')}>Edit Email: {userData.email}</p> */}
+                                                <p style={{ display: "flex" }}>
+                                                    Edit Email: {userData.email}
+                                                    <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('email')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample3" role="button" aria-expanded="false" aria-controls="multiCollapseExample3"></i>
+                                                </p>
+                                                {/* {editField === 'email' && ( */}
+                                                <div className="collapse multi-collapse" id="multiCollapseExample3">
+                                                    <input
+                                                        type="email"
+                                                        value={email}
+                                                        onChange={(e) => setEmail(e.target.value)}
+                                                        placeholder="Enter new email"
+                                                        className='input1'
+                                                    />
+                                                    <button onClick={() => handleUpdateUser("email", email)} className='button_sub'>Update</button>
+                                                </div>
+                                                {/* )} */}
+                                            </div>
+                                            <div className='frilistdata'>
+                                                {/* <p onClick={() => setEditField('dob')}>Edit Date of Birth: {userData.dob}</p> */}
+                                                <p style={{ display: "flex" }}>
+                                                    Edit Date of Birth: {userData.dob}
+                                                    <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('dob')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample4" role="button" aria-expanded="false" aria-controls="multiCollapseExample4"></i>
+                                                </p>
+                                                {/* {editField === 'dob' && ( */}
+                                                <div className="collapse multi-collapse" id="multiCollapseExample4">
+                                                    <input
+                                                        type="date"
+                                                        value={dob}
+                                                        onChange={(e) => setDob(e.target.value)}
+                                                        placeholder="Enter new date of birth"
+                                                        className='input1'
+                                                    />
+                                                    <button onClick={() => handleUpdateUser("dob", dob)} className='button_sub'>Update</button>
+                                                </div>
+                                                {/* )} */}
+                                            </div>
+                                            <div className='frilistdata'>
+                                                {/* <p onClick={() => setEditField('bio')}>Edit bio: {userData.bio || "bio"}</p> */}
+                                                <p style={{ display: "flex" }}>
+                                                    Edit bio: {userData.bio || "bio"}
+                                                    <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('bio')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample5" role="button" aria-expanded="false" aria-controls="multiCollapseExample5"></i>
+                                                </p>
+                                                {/* {editField === 'bio' && ( */}
+                                                <div className="collapse multi-collapse" id="multiCollapseExample5">
+                                                    <input
+                                                        type="text"
+                                                        value={bio || "bio"}
+                                                        onChange={(e) => setBio(e.target.value)}
+                                                        placeholder="Enter new bio"
+                                                        className='input1'
+                                                    />
+                                                    <button onClick={() => handleUpdateUser("bio", bio)} className='button_sub'>Update</button>
+                                                </div>
+                                                {/* )} */}
+                                            </div>
+                                        </Modal.Body>
+                                    </Modal>
+                                </div>
                                 <div style={{ display: 'flex' }}>
 
                                     <Modal show={show1} onHide={handleClose1}>
@@ -483,3 +779,20 @@ export default function Profile() {
         </div>
     );
 }
+
+// const handleUpdateUser = async (field, value) => {
+//     if (userData && value.trim() && field.trim() !== "") {
+//         try {
+//             const userDocRef = doc(db, "users", uidd);
+//             console.log("userDocRef",userDocRef);
+//             await updateDoc(userDocRef, { [field]: value });
+//             console.log(`${field} updated successfully!`);
+//             // Optionally update local state if necessary
+//             setUserData((prevData) => ({ ...prevData, [field]: value }));
+//             handleCloseSettingsModal();
+//             // console.log(object)
+//         } catch (error) {
+//             console.error(`Error updating ${field}:`, error);
+//         }
+//     }
+// };

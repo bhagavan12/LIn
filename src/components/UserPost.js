@@ -583,7 +583,7 @@ const PostForm = () => {
         {uploadProgress > 0 && <p>Upload Progress: {uploadProgress.toFixed(2)}%</p>}
         <div className="loaderp" style={{ width: `${uploadProgress}%` }}></div>
         <div class="container_input" action="#">
-          <input placeholder="Type caption" class="input1" name="text" type="text" value={caption} onChange={(e) => setCaption(e.target.value)} />
+          <input placeholder="Type caption" className="input1" name="text" type="text" value={caption} onChange={(e) => setCaption(e.target.value)} />
           <button className={`button_sub ${postCreated ? 'button_sub_green' : ''}`} type="submit" onClick={handleSubmit}>
             {postCreated ? 'Post Created!' : 'Submit'}
           </button>
