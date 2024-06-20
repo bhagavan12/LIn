@@ -761,7 +761,7 @@ export default function Profile() {
                         {!isMobileView && userData && (
                             <div className='Trdrow_data'>
                                 <p id='fname'>{userData.fullName}</p>
-                                <p id='bio'>{users.bio}</p>
+                                <p id='bio'>{userData.bio}</p>
                             </div>
                         )}
                     </div>
