@@ -56,9 +56,11 @@
   /* padding: 10px 10px; */
   align-items: center;
   z-index: 10000;
+  transition: background-color 0.5s;
 }
 .navbar-menu .nav-link:hover {
- background-color:  rgb(247, 242, 242);
+  background-color: rgba(249, 245, 244, 0.949);
+  box-shadow: 0 0 0 5px rgb(249, 245, 244);
 }
 /*avatar*/
 .profile-avatar {

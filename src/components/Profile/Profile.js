@@ -254,6 +254,7 @@ export default function Profile() {
     const [bio, setBio] = useState("");
     const [editField, setEditField] = useState(null); // State to track which field is being edited
     const [updated, setUpdated] = useState("")
+
     /*no use*/
     useEffect(() => {
         if (userData) {
@@ -296,6 +297,11 @@ export default function Profile() {
                     setUserData((prevData) => ({ ...prevData, [field]: value }));
                     handleCloseSettingsModal();
                     setEditField(null); // Reset edit field state
+                    setUpdated(true);
+                    // console.log(" created with ID: ", );
+                    setTimeout(() => {
+                        setUpdated(false); // Reset postCreated after some time
+                    }, 5000);
                 }
             } catch (error) {
                 console.error(`Error updating ${field}:`, error);
@@ -345,11 +351,13 @@ export default function Profile() {
                                 <Modal.Title>Posting</Modal.Title>
                             </Modal.Header> */}
                             <Modal.Body className='frilist'>
+                                <p className='model_header_h4'>Profile Details Editing</p>
                                 <div className='frilistdata' >
-                                    <p style={{ display: "flex" }}>
-                                        Edit Username: {userData.username}
+                                    <div className='edit-container'>
+                                        <p className='edit_h'>User Name</p>
+                                        <p className='user-data'>{userData.username}</p>
                                         <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('username')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1"></i>
-                                    </p>
+                                    </div>
                                     {/* {editField === 'username' && ( */}
                                     <div className="collapse" id="multiCollapseExample1">
                                         <input
@@ -359,16 +367,17 @@ export default function Profile() {
                                             placeholder="Enter new username"
                                             className='input1'
                                         />
-                                        <button onClick={() => handleUpdateUser("username", username)} className='button_sub'>Update</button>
+                                        <button onClick={() => handleUpdateUser("username", username)} className={`button_sub ${updated ? 'button_sub_green' : ''}`}>Update</button>
                                     </div>
                                     {/* )} */}
                                 </div>
                                 <div className='frilistdata'>
                                     {/* <p onClick={() => setEditField('fullName')}>Edit Full Name: {userData.fullName}</p> */}
-                                    <p style={{ display: "flex" }}>
-                                        Edit Full Name: {userData.fullName}
+                                    <div className='edit-container'>
+                                        <p className='edit_h'>Full Name</p>
+                                        <p className='user-data'>{userData.fullName}</p>
                                         <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('fullName')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample2" role="button" aria-expanded="false" aria-controls="multiCollapseExample2"></i>
-                                    </p>
+                                    </div>
                                     {/* {editField === 'fullName' && ( */}
                                     <div className="collapse multi-collapse" id="multiCollapseExample2">
                                         <input
@@ -384,10 +393,11 @@ export default function Profile() {
                                 </div>
                                 <div className='frilistdata'>
                                     {/* <p onClick={() => setEditField('email')}>Edit Email: {userData.email}</p> */}
-                                    <p style={{ display: "flex" }}>
-                                        Edit Email: {userData.email}
+                                    <div className='edit-container'>
+                                        <p className='edit_h'>Email</p>
+                                        <p className='user-data'>{userData.email}</p>
                                         <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('email')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample3" role="button" aria-expanded="false" aria-controls="multiCollapseExample3"></i>
-                                    </p>
+                                    </div>
                                     {/* {editField === 'email' && ( */}
                                     <div className="collapse multi-collapse" id="multiCollapseExample3">
                                         <input
@@ -403,10 +413,11 @@ export default function Profile() {
                                 </div>
                                 <div className='frilistdata'>
                                     {/* <p onClick={() => setEditField('dob')}>Edit Date of Birth: {userData.dob}</p> */}
-                                    <p style={{ display: "flex" }}>
-                                        Edit Date of Birth: {userData.dob}
+                                    <div className='edit-container'>
+                                        <p className='edit_h'>DOB</p>
+                                        <p className='user-data'>{userData.dob}</p>
                                         <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('dob')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample4" role="button" aria-expanded="false" aria-controls="multiCollapseExample4"></i>
-                                    </p>
+                                    </div>
                                     {/* {editField === 'dob' && ( */}
                                     <div className="collapse multi-collapse" id="multiCollapseExample4">
                                         <input
@@ -422,10 +433,11 @@ export default function Profile() {
                                 </div>
                                 <div className='frilistdata'>
                                     {/* <p onClick={() => setEditField('bio')}>Edit bio: {userData.bio || "bio"}</p> */}
-                                    <p style={{ display: "flex" }}>
-                                        Edit bio: {userData.bio || "bio"}
+                                    <div className='edit-container'>
+                                        <p className='edit_h'>Bio</p>
+                                        <p className='user-data'>{userData.bio}</p>
                                         <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('bio')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample5" role="button" aria-expanded="false" aria-controls="multiCollapseExample5"></i>
-                                    </p>
+                                    </div>
                                     {/* {editField === 'bio' && ( */}
                                     <div className="collapse multi-collapse" id="multiCollapseExample5">
                                         <input
@@ -551,11 +563,13 @@ export default function Profile() {
                                 <Modal.Title>Posting</Modal.Title>
                             </Modal.Header> */}
                                         <Modal.Body className='frilist'>
+                                            <p className='model_header_h4'>Profile Details Editing</p>
                                             <div className='frilistdata' >
-                                                <p style={{ display: "flex" }}>
-                                                    Edit Username: {userData.username}
+                                                <div className='edit-container'>
+                                                    <p className='edit_h'>User Name</p>
+                                                    <p className='user-data'>{userData.username}</p>
                                                     <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('username')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1"></i>
-                                                </p>
+                                                </div>
                                                 {/* {editField === 'username' && ( */}
                                                 <div className="collapse" id="multiCollapseExample1">
                                                     <input
@@ -565,16 +579,17 @@ export default function Profile() {
                                                         placeholder="Enter new username"
                                                         className='input1'
                                                     />
-                                                    <button onClick={() => handleUpdateUser("username", username)} className='button_sub'>Update</button>
+                                                    <button onClick={() => handleUpdateUser("username", username)} className={`button_sub ${updated ? 'button_sub_green' : ''}`}>Update</button>
                                                 </div>
                                                 {/* )} */}
                                             </div>
                                             <div className='frilistdata'>
                                                 {/* <p onClick={() => setEditField('fullName')}>Edit Full Name: {userData.fullName}</p> */}
-                                                <p style={{ display: "flex" }}>
-                                                    Edit Full Name: {userData.fullName}
+                                                <div className='edit-container'>
+                                                    <p className='edit_h'>Full Name</p>
+                                                    <p className='user-data'>{userData.fullName}</p>
                                                     <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('fullName')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample2" role="button" aria-expanded="false" aria-controls="multiCollapseExample2"></i>
-                                                </p>
+                                                </div>
                                                 {/* {editField === 'fullName' && ( */}
                                                 <div className="collapse multi-collapse" id="multiCollapseExample2">
                                                     <input
@@ -590,10 +605,11 @@ export default function Profile() {
                                             </div>
                                             <div className='frilistdata'>
                                                 {/* <p onClick={() => setEditField('email')}>Edit Email: {userData.email}</p> */}
-                                                <p style={{ display: "flex" }}>
-                                                    Edit Email: {userData.email}
+                                                <div className='edit-container'>
+                                                    <p className='edit_h'>Email</p>
+                                                    <p className='user-data'>{userData.email}</p>
                                                     <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('email')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample3" role="button" aria-expanded="false" aria-controls="multiCollapseExample3"></i>
-                                                </p>
+                                                </div>
                                                 {/* {editField === 'email' && ( */}
                                                 <div className="collapse multi-collapse" id="multiCollapseExample3">
                                                     <input
@@ -609,10 +625,11 @@ export default function Profile() {
                                             </div>
                                             <div className='frilistdata'>
                                                 {/* <p onClick={() => setEditField('dob')}>Edit Date of Birth: {userData.dob}</p> */}
-                                                <p style={{ display: "flex" }}>
-                                                    Edit Date of Birth: {userData.dob}
+                                                <div className='edit-container'>
+                                                    <p className='edit_h'>DOB</p>
+                                                    <p className='user-data'>{userData.dob}</p>
                                                     <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('dob')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample4" role="button" aria-expanded="false" aria-controls="multiCollapseExample4"></i>
-                                                </p>
+                                                </div>
                                                 {/* {editField === 'dob' && ( */}
                                                 <div className="collapse multi-collapse" id="multiCollapseExample4">
                                                     <input
@@ -628,10 +645,11 @@ export default function Profile() {
                                             </div>
                                             <div className='frilistdata'>
                                                 {/* <p onClick={() => setEditField('bio')}>Edit bio: {userData.bio || "bio"}</p> */}
-                                                <p style={{ display: "flex" }}>
-                                                    Edit bio: {userData.bio || "bio"}
+                                                <div className='edit-container'>
+                                                    <p className='edit_h'>Bio</p>
+                                                    <p className='user-data'>{userData.bio}</p>
                                                     <i className='hugeicons--pencil-edit-02 edit_properties' id='iconsett' onClick={() => setEditField('bio')} style={{ cursor: "pointer" }} data-bs-toggle="collapse" href="#multiCollapseExample5" role="button" aria-expanded="false" aria-controls="multiCollapseExample5"></i>
-                                                </p>
+                                                </div>
                                                 {/* {editField === 'bio' && ( */}
                                                 <div className="collapse multi-collapse" id="multiCollapseExample5">
                                                     <input
@@ -773,6 +791,7 @@ export default function Profile() {
                     ></button>
                 </div>
             </div>
+            <hr></hr>
             <div className=''>
                 <PostShow />
             </div>

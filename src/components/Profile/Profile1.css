@@ -595,7 +595,20 @@
   font-size: 13px;
   box-shadow: rgba(104, 100, 100, 0.1) 0px 4px 6px -1px, rgba(49, 42, 42, 0.06) 0px 2px 4px -1px;
 }
-
+.button_sub_green {
+  padding: 6px 15px;
+  text-align: center;
+  color: rgb(95, 87, 87);
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
+  transition: 0.5s;
+  width: 100%;
+  margin-top: 7px;
+  font-size: 13px;
+  box-shadow: rgba(104, 100, 100, 0.1) 0px 4px 6px -1px, rgba(49, 42, 42, 0.06) 0px 2px 4px -1px;
+  background-color: green;
+}
 .button_sub:hover {
   border-radius: 7px;
   background-color: rgb(243, 242, 242);
@@ -610,13 +623,14 @@
 .frilist{
   list-style-type:none;
   /* border: 1px solid black; */
-  overflow-y: scroll;
-  height:400px;
+  /* overflow-y: scroll; */
+  /* height:400px; */
+  
 }
 .frilistdata{
   margin-bottom: 10px;
   cursor: pointer;
-  
+  align-items: center;
   border-radius: 10px;
   /* border: 1px solid black; */
   padding: 10px;
@@ -624,7 +638,7 @@
 }
 .frilistdata:hover{
   background-color: rgba(249, 245, 244, 0.749);
-  box-shadow: 0 0 0 5px rgb(249, 245, 244);
+  box-shadow: 0 0 0 5px #e9ebec;
 }
 /*friedlistdata*/
 /*****/
@@ -686,17 +700,39 @@
 
  /*loader for profile image upload*/
 /*edit_properties*/
-.edit_properties{
+.edit-container {
+  display: flex;
+  align-items: center; 
+  justify-content: space-between; 
   font-family: monospace;
-  background-color: #f3f7fe;
+  font-weight: bolder;
+  font-size: large;
+  height: 30px;
+}
+
+.edit_h {
+  padding: 3px 6px;
+  background-color: #e9ebec;
+  border-radius: 10px;
+  margin-bottom: auto;
+  /* margin-right: 30px; */
+}
+
+.user-data {
+  /* padding: 3px 6px; */
+  margin-top: 12px;
+  margin-left: -30px; 
+}
+
+.edit_properties {
+  font-family: monospace;
+  background-color: #e9ebec;
   color: #b2c6e6;
   border: none;
   border-radius: 8px;
-  margin-left: auto;
-  /* width: fit-content; */
-  /* height: 45px/; */
-  transition: .3s;
+  transition: 0.3s;
 }
+
 .edit_properties:hover {
   background-color: #eef1f5;
   box-shadow: 0 0 0 5px #93b9f55f;
