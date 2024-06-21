@@ -59,39 +59,64 @@ export default function EditButton() {
     // console.log(userDataff.dob);
     // console.log("sdata:",userDataff.uid);
     // const senderid=userDataff.uid
-    const { uploadProfileImage, uploadProgress } = useProfileImage();
+    // const { uploadProfileImage, uploadProgress } = useProfileImage();
     const [userData, setUserData] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const [profileImageUrl, setProfileImageUrl] = useState(null); // State for profile image URL
     const [isFriend, setIsFriend] = useState(false);
     const [friendCount, setFriendCount] = useState(0); // State for friend count
     const [numOfPosts, setNumOfPosts] = useState(0);
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // const data = await userDataf();
-                const { state } = location;
-                if (state && state.userData) {
-                    setUserData(state.userData);
-                }
-                setUserData(state.userData);
-                console.log("userData.userData", state.userData);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             // const data = await userDataf();
+    //             const { state } = location;
+    //             if (state && state.userData) {
+    //                 setUserData(state.userData);
+    //                 console.log("userData.userData", state.userData);
+    //             }
+    //             setUserData(state.userData);
 
-                // Fetch and set profile image URL
+    //             // Fetch and set profile image URL
+    //             const imageUrl = await getProfileImageUrl(userId);
+    //             setProfileImageUrl(imageUrl);
+    //             const friendsCount = await getFriendCount(userId);
+    //             setFriendCount(friendsCount);
+    //             const postsCount = await getPostsCount(userId);
+    //             setNumOfPosts(postsCount);
+
+    //         } catch (error) {
+    //             console.error("Error fetching user data:", error);
+    //         }
+    //     };
+    //     fetchData();
+    // }, [location]);
+    useEffect(()=>{
+        async function fetchUserData() {
+            try {
+                const q = query(collection(db, "users"), where("uid", "==", userId));
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty) {
+                    const userDocSnapshot = querySnapshot.docs[0];
+                    const userdata = userDocSnapshot.data();
+                    console.log("Fetched profiles user Data:", userdata);
+                    setUserData(userdata);
+                    // Fetch and set profile image URL
                 const imageUrl = await getProfileImageUrl(userId);
                 setProfileImageUrl(imageUrl);
                 const friendsCount = await getFriendCount(userId);
                 setFriendCount(friendsCount);
                 const postsCount = await getPostsCount(userId);
                 setNumOfPosts(postsCount);
-
+                } else {
+                    console.log("User document not found for uid:", userId);
+                }
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
-        };
-        fetchData();
-    }, [location]);
-
+        }
+        fetchUserData();
+    },[userId])
 
 
     // Function to get profile image URL from Firebase Storage
@@ -341,7 +366,7 @@ export default function EditButton() {
                         {isMobileView && userData && (
                             <div className='Trdrow_data'>
                                 <p id='fname'>{userData.fullName}</p>
-                                <p id='bio'>Always on the go 🔁</p>
+                                <p id='bio'>{userData.bio || "Always on the go 🔁"}</p>
                             </div>
                         )}
                     </div>
@@ -386,7 +411,7 @@ export default function EditButton() {
                         {!isMobileView && userData && (
                             <div className='Trdrow_data'>
                                 <p id='fname'>{userData.fullName}</p>
-                                <p id='bio'>Always on the go 🔁</p>
+                                <p id='bio'>{userData.bio||" Always on the go 🔁"}</p>
                             </div>
                         )}
                     </div>

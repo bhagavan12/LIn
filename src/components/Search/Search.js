@@ -295,7 +295,8 @@ const Search = ({ onClose }) => { // Accept onClose as a prop
                     uid: docData.uid,
                     username: docData.username,
                     profileimg: imageUrl,
-                    fullName:docData.fullName
+                    fullName:docData.fullName,
+                    bio:docData.bio
                 };
             }));
             setSearchResults(users);
