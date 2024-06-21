@@ -25,7 +25,7 @@ export default function EditButton() {
     const handleShow1 = () => setShow1(true);
     // const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
-    
+
     // const 
     /*modal*/
     const [friendsDetails, setFriendsDetails] = useState([]);
@@ -91,7 +91,7 @@ export default function EditButton() {
     //     };
     //     fetchData();
     // }, [location]);
-    useEffect(()=>{
+    useEffect(() => {
         async function fetchUserData() {
             try {
                 const q = query(collection(db, "users"), where("uid", "==", userId));
@@ -102,12 +102,12 @@ export default function EditButton() {
                     console.log("Fetched profiles user Data:", userdata);
                     setUserData(userdata);
                     // Fetch and set profile image URL
-                const imageUrl = await getProfileImageUrl(userId);
-                setProfileImageUrl(imageUrl);
-                const friendsCount = await getFriendCount(userId);
-                setFriendCount(friendsCount);
-                const postsCount = await getPostsCount(userId);
-                setNumOfPosts(postsCount);
+                    const imageUrl = await getProfileImageUrl(userId);
+                    setProfileImageUrl(imageUrl);
+                    const friendsCount = await getFriendCount(userId);
+                    setFriendCount(friendsCount);
+                    const postsCount = await getPostsCount(userId);
+                    setNumOfPosts(postsCount);
                 } else {
                     console.log("User document not found for uid:", userId);
                 }
@@ -116,7 +116,7 @@ export default function EditButton() {
             }
         }
         fetchUserData();
-    },[userId])
+    }, [userId])
 
 
     // Function to get profile image URL from Firebase Storage
@@ -343,6 +343,22 @@ export default function EditButton() {
             console.error('Error fetching friends details:', error);
         }
     };
+    const [showSettingsModal, setShowSettingsModal] = useState(false);
+    const [copySuccess, setCopySuccess] = useState('');
+    const handleCopyLink = () => {
+        const link = `https://linkspace-three.vercel.app/userprofile/${userId}`;
+        navigator.clipboard.writeText(link)
+            .then(() => {
+                setCopySuccess('Link copied to clipboard!');
+                setTimeout(() => setCopySuccess(''), 2000); // Clear the message after 2 seconds
+            })
+            .catch((error) => {
+                setCopySuccess('Failed to copy the link');
+                console.error('Error copying text: ', error);
+            });
+    };
+    const handleCloseSettingsModal = () => setShowSettingsModal(false);
+    const handleShowSettingsModal = () => setShowSettingsModal(true);
     return (
         <div>
             {isMobileView && userData && (
@@ -350,7 +366,18 @@ export default function EditButton() {
                     <p id='uname'>{userData.username}</p>
                     <button type="button" className='pbutton' onClick={() => handleButtonClick(senderid.uid, userId)}>{isFriend ? "Unfollow" : "Send Request"}</button>
                     <button type="button" className='pbutton' >Message</button>
-                    <i className='system-uicons--settings' id='iconsett'></i>
+                    <i className='fluent--share-16-regular' id='iconsett'></i>
+                    <div style={{ display: 'flex' }}>
+
+                        <Modal show={showSettingsModal} onHide={handleCloseSettingsModal}>
+                            {/* <Modal.Header closeButton>
+                                <Modal.Title>Posting</Modal.Title>
+                            </Modal.Header> */}
+                            <Modal.Body className='frilist'>
+
+                            </Modal.Body>
+                        </Modal>
+                    </div>
 
 
                 </div>
@@ -377,7 +404,18 @@ export default function EditButton() {
                                 <p id='uname'>{userData.username}</p>
                                 <button type="button" className='pbutton' onClick={() => handleButtonClick(senderid.uid, userId)}>{isFriend ? "Unfollow" : "Send Request"}</button>
                                 <button type="button" className='pbutton' >Message</button>
-                                <i className='system-uicons--settings' id='iconsett'></i>
+                                <i className='fluent--share-16-regular' id='iconsett' onClick={handleShowSettingsModal} style={{ cursor: "pointer" }}></i>
+                                <div style={{ display: 'flex' }}>
+
+                                    <Modal show={showSettingsModal} onHide={handleCloseSettingsModal}>
+                                        {/* <Modal.Header closeButton>
+                                <Modal.Title>Posting</Modal.Title>
+                            </Modal.Header> */}
+                                        <Modal.Body className='frilist'>
+                                            <h4 style={{cursor:"pointer"}} onClick={handleCopyLink}>{`https://linkspace-three.vercel.app/userprofile/${userId}`}</h4>
+                                        </Modal.Body>
+                                    </Modal>
+                                </div>
                             </div>
                         )}
                         <div className='Sndrow_data'>
@@ -388,7 +426,7 @@ export default function EditButton() {
                                     <Modal.Title>Friends List</Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body>
-                                <ul className='frilist'>
+                                    <ul className='frilist'>
                                         {friendsDetails.map((friend, index) => (
                                             <li key={index} onClick={() => handleUserClick(friend)} className='frilistdata'>
                                                 <img
@@ -411,7 +449,7 @@ export default function EditButton() {
                         {!isMobileView && userData && (
                             <div className='Trdrow_data'>
                                 <p id='fname'>{userData.fullName}</p>
-                                <p id='bio'>{userData.bio||" Always on the go 🔁"}</p>
+                                <p id='bio'>{userData.bio || " Always on the go 🔁"}</p>
                             </div>
                         )}
                     </div>
