@@ -372,17 +372,27 @@ export default function FriendRequestsPage({userId}) {
         // </div>
         <div>
         <h1>Friend Requests</h1>
-        <ul>
+        <div>
             {friendRequests.map(request => (
-                <li key={request.id} style={{ marginBottom: '20px',border:"1px solid black",display:"flex"}}>
-                    <div onClick={() => handleUserClick(request)} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' ,marginRight:"50px"}}>
+                <div key={request.id} className="frilistdata" style={{listStyleType:"none"}}>
+                    <div onClick={() => handleUserClick(request)} className="centralize">
                         <img src={request.profileImageUrl} alt="Avatar" style={{ width: '50px', height: '50px', borderRadius: '50%', marginRight: '20px' }} />
                         <span>{request.username}</span>
+                    {/* <button className="copy" onClick={() => acceptRequest(request.id, request.uid)}>Accept</button> */}
+                        <div class="centralize">
+                            <div>
+                                <button className='copy' onClick={() => acceptRequest(request.id, request.uid)}>
+                                    <span>Accept</span>
+                                    <span>Accepted</span>
+                                </button>
+                                <div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <button className="acceptbtn" onClick={() => acceptRequest(request.id, request.uid)}>Accept</button>
-                </li>
+                </div>
             ))}
-        </ul>
+        </div>
     </div>
     );
 }
