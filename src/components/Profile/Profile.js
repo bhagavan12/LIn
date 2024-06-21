@@ -598,7 +598,7 @@ export default function Profile() {
                                 </button>
 
                                 <i className='system-uicons--settings' id='iconsett' onClick={handleShowSettingsModal} style={{ cursor: "pointer" }}></i>
-                                <i className='fluent--share-16-regular' id='iconsett' onClick={handleShowShareModal} style={{ cursor: "pointer", width: "2.3em" }}></i>
+                                <i className='fluent--share-16-regular' id='iconsett' onClick={handleShowShareModal} style={{ cursor: "pointer", width: "3.3em" }}></i>
 
 
 
