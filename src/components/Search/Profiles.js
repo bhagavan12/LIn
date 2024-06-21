@@ -412,7 +412,7 @@ export default function EditButton() {
                                 <Modal.Title>Posting</Modal.Title>
                             </Modal.Header> */}
                                         <Modal.Body className='frilist'>
-                                            <h4 style={{cursor:"pointer"}} onClick={handleCopyLink}>{`https://linkspace-three.vercel.app/userprofile/${userId}`}</h4>
+                                            <p className='model_header_h4' style={{cursor:"pointer",overflow:"auto"}} onClick={handleCopyLink}>{`https://linkspace-three.vercel.app/userprofile/${userId}`}</p>
                                         </Modal.Body>
                                     </Modal>
                                 </div>
