@@ -212,7 +212,7 @@ html {
 }
 
 /* Logout button */
-.navbar-auth button {
+/* .navbar-auth button {
   background-color: transparent;
   color: white;
   border: none;
@@ -223,7 +223,7 @@ html {
 
 .navbar-auth button:hover {
   opacity: 0.8;
-}
+} */
 
 /* Responsive adjustments */
 @media (max-width: 768px) {

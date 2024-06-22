@@ -159,7 +159,7 @@ html {
   border-radius: 50%;
 }
 
-.navbar-auth button {
+/* .navbar-auth button {
   background-color: transparent;
   color: white;
   border: none;
@@ -170,7 +170,7 @@ html {
 
 .navbar-auth button:hover {
   opacity: 0.8;
-}
+} */
 
  /* Specific Icon Styles */
  .material-symbols--home {

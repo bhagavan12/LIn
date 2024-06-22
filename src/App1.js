@@ -68,7 +68,7 @@ import Profiles from './components/Search/Profiles';
 import Notification from './components/Notifications/Notifications';
 import Home from './components/HomeFeed/Homefeed';
 import Navbar from './components/Navbar/Navbar';
-import DLogin from './components/Dummy/DLogin';
+// import DLogin from './components/Dummy/DLogin';
 import './App.css'; // Import your CSS file for general styles
 
 const AppContent = () => {
