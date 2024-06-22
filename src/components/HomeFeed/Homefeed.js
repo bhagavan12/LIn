@@ -314,7 +314,7 @@ const FriendsPosts = () => {
     return sortedComments && sortedComments.map((comment, index) => (
       <div key={index} className="edit-container" style={{ borderBottom: "1px solid rgb(204, 197, 197)" }}>
         <p style={{ margin: "auto 0px" }}><strong>{comment.username}</strong>: {comment.comment}</p>
-        {comment.userId === user.uid && (
+        {comment.userId === uuid && (
           <div>
             <i className='hugeicons--pencil-edit-02 edit_properties' onClick={() => handleEditComment(post.id, index, comment.comment)} style={{ width: "20px", height: "20px" }}></i>
             <i className='ic--twotone-delete edit_properties' onClick={() => handleDeleteComment(post.id, index)} style={{ width: "20px", height: "20px" }}></i>
