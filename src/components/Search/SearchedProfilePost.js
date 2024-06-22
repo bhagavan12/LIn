@@ -14,6 +14,7 @@ import { Button, Carousel } from "react-bootstrap"; // Import Carousel from reac
 import { MDBCardVideo } from 'mdbreact';
 import '../PostShow.css';
 const PostList = ({ location, userId }) => {
+    const { user } = useUserAuth();
     const { userDataf } = useUserAuth();
     const [uidd,setUidd]=useState('');
     const [posts, setPosts] = useState([]);
@@ -23,6 +24,9 @@ const PostList = ({ location, userId }) => {
     const [usernamee, setUsernamee] = useState(null);
     const [friendsPosts, setFriendsPosts] = useState([]);
     const [profileImageUrl, setProfileImageUrl] = useState(null); // State for profile image URL
+    const [comments, setComments] = useState({});
+    const [commentInput, setCommentInput] = useState('');
+    const [editingComment, setEditingComment] = useState({ postId: null, commentId: null });
     useEffect(() => {
         const fetchPosts = async () => {
             try {
@@ -37,12 +41,19 @@ const PostList = ({ location, userId }) => {
                 const sortedPosts = fetchedPosts.sort((a, b) => b.createdAt - a.createdAt);
                 setPosts(fetchedPosts);
                 setUsernamee(posts.username);
+                ////
+                const initialComments = {};
+                fetchedPosts.forEach(post => {
+                    initialComments[post.id] = post.comments || [];
+                });
+                setComments(initialComments);
+                ////
             } catch (error) {
                 console.error("Error fetching posts:", error);
             }
         };
         fetchPosts();
-    }, [location]);
+    }, [location,comments]);
 
     const handlePostClick = (post) => {
         setModalPost(post);
@@ -121,6 +132,113 @@ const PostList = ({ location, userId }) => {
         if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
         return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
     };
+    const handleCommentSubmit = async (post) => {
+        if (!commentInput.trim()) return;
+
+        try {
+            const postRef = doc(db, 'posts', post.id);
+            const newComment = {
+                userId: user.uid,
+                username: user.displayName,
+                comment: commentInput,
+                createdAt: new Date()
+            };
+
+            const updatedComments = [...(comments[post.id] || []), newComment];
+            await updateDoc(postRef, { comments: updatedComments });
+
+            setCommentInput('');
+            setComments((prevComments) => ({
+                ...prevComments,
+                [post.id]: updatedComments
+            }));
+        } catch (error) {
+            console.error('Error adding comment:', error);
+        }
+    };
+
+    const handleEditComment = (postId, commentId, commentText) => {
+        setEditingComment({ postId, commentId });
+        setCommentInput(commentText);
+    };
+    const handleUpdateComment = async (post) => {
+        if (!commentInput.trim()) return;
+
+        try {
+            const postRef = doc(db, 'posts', post.id);
+
+            // Get the current sorted comments
+            const sortedComments = comments[post.id]?.slice().sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
+
+            // Find the correct index in sorted comments
+            const sortedIndex = sortedComments.findIndex(sc => sc.comment === comments[post.id][editingComment.commentId].comment);
+            // console.log()
+            // Update the comment in the original comments state based on sorted index
+            const updatedComments = comments[post.id].map((comment, index) => {
+                if (index === sortedIndex) {
+                    return { ...comment, comment: commentInput };
+                } else {
+                    return comment;
+                }
+            });
+
+            // Update the Firestore document with the updated comments
+            await updateDoc(postRef, { comments: updatedComments });
+
+            // Reset editing state and clear comment input
+            setEditingComment({ postId: null, commentId: null });
+            setCommentInput('');
+
+            // Update the local state with the updated comments
+            setComments((prevComments) => ({
+                ...prevComments,
+                [post.id]: updatedComments,
+            }));
+        } catch (error) {
+            console.error('Error updating comment:', error);
+        }
+    };
+    const handleDeleteComment = async (postId, commentIndex) => {
+        try {
+            const postRef = doc(db, 'posts', postId);
+
+            // Get the current sorted comments
+            const sortedComments = comments[postId]?.slice().sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
+
+            // Find the correct index in sorted comments
+            const commentToDelete = sortedComments[commentIndex];
+
+            // Update the original comments state by removing the comment
+            const updatedComments = comments[postId].filter((comment) => comment.comment !== commentToDelete.comment);
+
+            // Update the Firestore document with the updated comments
+            await updateDoc(postRef, { comments: updatedComments });
+
+            // Update the local state with the updated comments
+            setComments((prevComments) => ({
+                ...prevComments,
+                [postId]: updatedComments,
+            }));
+        } catch (error) {
+            console.error('Error deleting comment:', error);
+        }
+    };
+    const renderComments = (post) => {
+        // Sort comments by createdAt property in descending order (latest first)
+        const sortedComments = comments[post.id]?.slice().sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
+
+        return sortedComments && sortedComments.map((comment, index) => (
+            <div key={index} className="edit-container" style={{ borderBottom: "1px solid rgb(204, 197, 197)" }}>
+                <p style={{ margin: "auto 0px" }}><strong>{comment.username}</strong>: {comment.comment}</p>
+                {comment.userId === user.uid && (
+                    <div>
+                        <i className='hugeicons--pencil-edit-02 edit_properties' onClick={() => handleEditComment(post.id, index, comment.comment)} style={{ width: "20px", height: "20px" }}></i>
+                        <i className='ic--twotone-delete edit_properties' onClick={() => handleDeleteComment(post.id, index)} style={{ width: "20px", height: "20px" }}></i>
+                    </div>
+                )}
+            </div>
+        ));
+    };
     return (
         <div>
             <div className='postfeed'>
@@ -187,11 +305,28 @@ const PostList = ({ location, userId }) => {
                                 <i className={modalPost.likedBy && modalPost.likedBy.includes(uidd) ? 'icon-park-solid--like' : 'icon-park-outline--like1'} onClick={() => handleLikeToggle(modalPost)}></i>
                             </span>
                             <span className="comment-icon">
-                                <i className="iconamoon--comment-thin"></i>
+                                <i className="iconamoon--comment-thin" data-bs-toggle="collapse" href={`#collapse${modalPost.id}`} role="button" aria-expanded="false" aria-controls={`collapse${modalPost.id}`}></i>
                             </span>
                         </div>
                         <p>{modalPost.likes} Likes</p>
                         <p><span id='uname1'>{modalPost.username}</span> {modalPost.caption}</p>
+                        <div className="collapse" id={`collapse${modalPost.id}`}>
+                            <div style={{ maxHeight: "120px", overflow: "auto", marginBottom: "2px" }}>
+                                {renderComments(modalPost)}
+                            </div>
+                            <input
+                                type="text"
+                                value={commentInput}
+                                onChange={(e) => setCommentInput(e.target.value)}
+                                placeholder="Enter your comment"
+                                className='input1'
+                            />
+                            {editingComment.postId === modalPost.id ? (
+                                <button className='button_sub' onClick={() => handleUpdateComment(modalPost)}>Update</button>
+                            ) : (
+                                <button className='button_sub' onClick={() => handleCommentSubmit(modalPost)}>Comment</button>
+                            )}
+                        </div>
                     </div>
                 )}
             </Modal>
