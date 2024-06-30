@@ -257,7 +257,8 @@ export default function FriendRequestsPage({userId}) {
                 if (userId) {
                     fetchFriendRequests();
                 }
-            }, [userId]);
+                // }, [userId]);
+            }, []);
     // useEffect(() => {
     //     const fetchFriendRequests = async () => {
     //         try {

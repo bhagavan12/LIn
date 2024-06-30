@@ -459,7 +459,7 @@ export default function Profile() {
                                     <div className="collapse multi-collapse" id="multiCollapseExample5">
                                         <input
                                             type="text"
-                                            value={bio || "bio"}
+                                            value={bio || ""}
                                             onChange={(e) => setBio(e.target.value)}
                                             placeholder="Enter new bio"
                                             className='input1'

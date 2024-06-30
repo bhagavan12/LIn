@@ -80,7 +80,8 @@ const FriendsPosts = () => {
     };
 
     fetchFriendsPosts();
-  }, [user, comments]);
+  // }, [user, comments]);
+  }, [comments]);
 
   // Function to get profile image URL from Firebase Storage
   const getProfileImageUrl = async (userId) => {
