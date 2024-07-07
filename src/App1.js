@@ -70,11 +70,12 @@ import Home from './components/HomeFeed/Homefeed';
 import Navbar from './components/Navbar/Navbar';
 // import DLogin from './components/Dummy/DLogin';
 import './App.css'; // Import your CSS file for general styles
-
+import Cookies from 'js-cookie';
 const AppContent = () => {
   const { user } = useUserAuth();
   const [yes, setYes] = useState(user);
   useEffect(() => {
+    // const token = Cookies.get('session_token');
     setYes(user);
   }, [user]);
   return (

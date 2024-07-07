@@ -346,7 +346,7 @@ export default function EditButton() {
     const [showShareModal, setShowShareModal] = useState(false);
     const [copySuccess, setCopySuccess] = useState('');
     const handleCopyLink = () => {
-        const link = `https://linkspace-three.vercel.app/userprofile/${userId}`;
+        const link = `https://linkspace-sb.vercel.app/userprofile/${userId}`;
         navigator.clipboard.writeText(link)
             .then(() => {
                 setCopySuccess('Link copied to clipboard!');
@@ -365,7 +365,7 @@ export default function EditButton() {
                 <div className='Fstrow_data'>
                     <p id='uname' style={{marginTop:"22px",fontWeight:"bolder"}}>{userData.username}</p>
                     <button type="button" className='pbutton' onClick={() => handleButtonClick(senderid.uid, userId)}>{isFriend ? "Unfollow" : "Send Request"}</button>
-                    <button type="button" className='pbutton' >Message</button>
+                    <button type="button" className='pbutton' style={{cursor:"not-allowed"}}>Message</button>
                     <i className='fluent--share-16-regular' id='iconsett' onClick={handleShowShareModal} style={{ cursor: "pointer" ,width:"2.3em"}}></i>
                     <div style={{ display: 'flex' }}>
 
@@ -376,7 +376,7 @@ export default function EditButton() {
                             <Modal.Body className='frilist'>
                                 <p className='model_header_h4' style={{ cursor: "pointer", overflow: "auto" }} >Copy to share the profile</p>
                                 <div className='frilistdata' style={{ display: "flex" }}>
-                                    <input type='text' value={`https://linkspace-three.vercel.app/userprofile/${userId}`} className='input1' disabled></input>
+                                    <input type='text' value={`https://linkspace-sb.vercel.app/userprofile/${userId}`} className='input1' disabled></input>
                                     <div class="centralize">
                                         <div>
                                             <button className='copy' onClick={handleCopyLink}>
@@ -416,7 +416,7 @@ export default function EditButton() {
                             <div className='Fstrow_data'>
                                 <p id='uname'>{userData.username}</p>
                                 <button type="button" className='pbutton' onClick={() => handleButtonClick(senderid.uid, userId)}>{isFriend ? "Unfollow" : "Send Request"}</button>
-                                <button type="button" className='pbutton' >Message</button>
+                                <button type="button" className='pbutton' style={{cursor:"not-allowed"}} >Message</button>
                                 <i className='fluent--share-16-regular' id='iconsett' onClick={handleShowShareModal} style={{ cursor: "pointer" }}></i>
                                 <div style={{ display: 'flex' }}>
 
@@ -425,9 +425,10 @@ export default function EditButton() {
                                 <Modal.Title>Posting</Modal.Title>
                             </Modal.Header> */}
                                         <Modal.Body className='frilist'>
+                                            
                                             <p className='model_header_h4' style={{ cursor: "pointer", overflow: "auto" }} >Copy to share the profile</p>
                                             <div className='frilistdata' style={{ display: "flex" }}>
-                                                <input type='text' value={`https://linkspace-three.vercel.app/userprofile/${userId}`} className='input1' disabled></input>
+                                                <input type='text' value={`https://linkspace-sb.vercel.app/userprofile/${userId}`} className='input1' disabled></input>
                                                 <div class="centralize">
                                                     <div>
                                                         <button className='copy' onClick={handleCopyLink}>
@@ -446,13 +447,14 @@ export default function EditButton() {
                         )}
                         <div className='Sndrow_data'>
                             <p id='nposts'>{numOfPosts} posts</p>
-                            <p id='nfriends' onClick={() => setShowFriends(true)}>{friendCount} friends</p>
+                            <p id='nfriends' onClick={() => setShowFriends(true)} style={{cursor:"pointer"}}>{friendCount} friends</p>
                             <Modal show={showFriends} onHide={() => setShowFriends(false)}>
                                 {/* <Modal.Header closeButton>
                                     <Modal.Title>Friends List</Modal.Title>
                                 </Modal.Header> */}
                                 <Modal.Body>
                                     <div className='frilist'>
+                                        <p className='model_header_h4' style={{ cursor: "pointer", overflow: "auto" }} >Friends List</p>
                                         {friendsDetails.map((friend, index) => (
                                             <li key={index} onClick={() => handleUserClick(friend)} className='frilistdata'>
                                                 <img
@@ -475,7 +477,7 @@ export default function EditButton() {
                         {!isMobileView && userData && (
                             <div className='Trdrow_data'>
                                 <p id='fname'>{userData.fullName}</p>
-                                <p id='bio'>{userData.bio || " Always on the go 🔁"}</p>
+                                <p id='bio'>{userData.bio || "Always on the go 🔁"}</p>
                             </div>
                         )}
                     </div>

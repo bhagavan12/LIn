@@ -66,7 +66,7 @@ export function UserAuthContextProvider({ children }) {
   async function logIn(email, password) {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const token = await userCredential.user.getIdToken();
-    Cookies.set("session_token", token, { expires: 1 / 48 }); // 30 minutes session
+    Cookies.set("session_token", token, { expires: 1 / 2 }); 
     await fetchUserData(email);
     setUser(userCredential.user);
     return userCredential.user;

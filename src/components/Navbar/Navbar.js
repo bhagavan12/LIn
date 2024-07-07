@@ -11,7 +11,7 @@ import Notifications from '../Notifications/Notifications';
 const MyNavbar = () => {
     const { user, logOut } = useUserAuth();
     // const { userDataf } = useUserAuth();
-    const [uid,setUid] =useState('');
+    const [uid, setUid] = useState('');
     const navigate = useNavigate();
     const [profileImageUrl, setProfileImageUrl] = useState(null);
     useEffect(() => {
@@ -23,7 +23,7 @@ const MyNavbar = () => {
             }
         };
         fetchProfileImage();
-    // }, [user]);
+        // }, [user]);
     }, []);
     // const handlenotifications = () => {
     //     setUid(user.uid);
@@ -83,15 +83,22 @@ const MyNavbar = () => {
     };
 
     return (
-        <nav className={showSidebar ? 'sidebar active' : 'sidebar'}>
+        <nav className={showSidebar ? 'sidebar ' : 'sidebar'}>
             <div className="">
-                <div className="navbar-brand">
-                    <Link to="/home" className='solar--link-square-bold'><i className=''></i></Link>
-                </div>
-                <button className="toggle-btn" onClick={toggleSidebar}>
+                {/* <div className="navbar-brand">
+                    <Link to="/home" className='token--etherlink'><i className=''></i></Link>
+                </div> */}
+
+                {/* <button className="toggle-btn" onClick={toggleSidebar}>
                     &#9776;
-                </button>
+                </button> */}
                 <div className="navbar-menu">
+                <div className="navbar-brand">
+                    <Link to="/home" className='token--etherlink'>
+                        <i className=''></i>
+                    {/* <div className='tooltip'>LinkSpace</div> */}
+                    </Link>
+                </div>
                     <Link to="/home" className="nav-link">
                         <i className="material-symbols--home"></i>
                     </Link>
@@ -109,7 +116,7 @@ const MyNavbar = () => {
                         <i className="mingcute--search-line"></i>
                     </Link>
 
-                    <div className={`offcanvas offcanvas-start ${!isMobileView ? "canvao":''}`} data-bs-backdrop="false" data-bs-scroll="true" tabIndex="-1" id="offcanvasSearch" aria-labelledby="offcanvasSearchLabel">
+                    <div className={`offcanvas offcanvas-start ${!isMobileView ? "canvao" : ''}`} data-bs-backdrop="false" data-bs-scroll="true" tabIndex="-1" id="offcanvasSearch" aria-labelledby="offcanvasSearchLabel">
                         <div className="offcanvas-header">
                             <h5 className="offcanvas-title" id="offcanvasSearchLabel">Search</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -120,7 +127,7 @@ const MyNavbar = () => {
                             </div>
                         </div>
                     </div>
-                    
+
                     <Link className="nav-link" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" aria-controls="offcanvasNotifications">
                         <i className="icon-park-outline--like"></i>
                     </Link>
@@ -160,10 +167,10 @@ const MyNavbar = () => {
                             <Notifications userId={uid}/>
                         </div>
                     </div> */}
-                    <Link to="" className="nav-link" style={{cursor:"not-allowed"}}>
+                    <Link to="" className="nav-link" style={{ cursor: "not-allowed" }}>
                         <i className="fe--messanger"></i>
                     </Link>
-                    <Link to="" className="nav-link" style={{cursor:"not-allowed"}}>
+                    <Link to="" className="nav-link" style={{ cursor: "not-allowed" }}>
                         <i className="mage--video-player-fill"></i>
                     </Link>
                     {/* <Link to="/mdb" className="nav-link">
@@ -188,7 +195,7 @@ const MyNavbar = () => {
                         )}
                        
                     </Link> */}
-                    <Link to="/mdb" className="nav-link" style={{marginLeft:"5px"}}>
+                    <Link to="/mdb" className="nav-link" style={{ marginLeft: "5px" }}>
                         {profileImageUrl ? (
                             <img src={profileImageUrl} alt="Profile" className="profile-avatar" />
                         ) : (
@@ -197,9 +204,9 @@ const MyNavbar = () => {
                     </Link>
                     <Link className="nav-link" onClick={handleLogout}>
                         {/* {user ? ( */}
-                            <>
-                                <i className="ic--outline-logout" ></i>
-                            </>
+                        <>
+                            <i className="ic--outline-logout" ></i>
+                        </>
                         {/* ) : (
                             <>
                                 <Link to="/login" className="nav-link">Login</Link>
@@ -207,7 +214,7 @@ const MyNavbar = () => {
                             </>
                         )} */}
                     </Link>
-                    
+
                 </div>
             </div>
         </nav>
