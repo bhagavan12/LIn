@@ -107,6 +107,30 @@
 }
 
 
+:root {
+  --navbar-link-padding: 10px; /* Default padding */
+}
+
+@media (min-width: 350px) {
+  :root {
+    --navbar-link-padding: 11px; /* Increase padding for medium screens */
+  }
+}
+@media (max-width: 399px) {
+  :root {
+    --navbar-link-padding: 12px; /* Increase padding for medium screens */
+  }
+}
+@media (min-width: 400px) {
+  :root {
+    --navbar-link-padding: 15px; /* Increase padding for medium screens */
+  }
+}
+@media (min-width: 410px) {
+  :root {
+    --navbar-link-padding: 16px; /* Increase padding for medium screens */
+  }
+}
 
 @media (max-width: 768px) {
   .sidebar {
@@ -114,7 +138,7 @@
     height: auto;
     position: relative;
     margin-bottom: 0px;
-    /* border: 1px solid black; */
+    border: 1px solid black;
   }
 
   .sidebar.active {
@@ -149,7 +173,7 @@
   .navbar-menu .nav-link{
     /* flex-direction: row; */
     margin-right: 2px;
-    padding:0 10px;
+    padding: 0 var(--navbar-link-padding);
   }
 }
 
@@ -172,7 +196,7 @@
   
   
   /* Responsive adjustments */
-  @media (max-width: 768px) {
+  /* @media (max-width: 768px) {
     .toggle-btn {
       display: block;
       color: black;
@@ -199,7 +223,7 @@
     
   
     
-  }
+  } */
   
 /* Icons */
 
