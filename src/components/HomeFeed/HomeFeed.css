@@ -1,8 +1,8 @@
    .postcard {
-    border-radius: 2px;
+    border-radius: 10px;
     margin: 20px auto;
     box-shadow: 3px 1px 10px 0.5px rgba(43, 42, 42, 0.145);
-    width: 500px;
+    width: 520px;
     padding: 20px;
     background-color: white;
   }
@@ -43,7 +43,7 @@
     width: 100%;
     height: auto;
     max-width: 560px;
-    border-radius: 3px;
+    border-radius: 10px;
   }
   
   .slick-slider {
@@ -152,8 +152,8 @@
   /* Media queries for phone view */
   @media (max-width: 600px) {
     .postcard {
-      width: 96%;
-      padding: 2px;
+      width: 90%;
+      padding: 10px;
     }
   
     .postcard #uname {
