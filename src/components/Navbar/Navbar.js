@@ -93,15 +93,17 @@ const MyNavbar = () => {
                     &#9776;
                 </button> */}
                 <div className="navbar-menu">
-                <div className="navbar-brand">
-                    <Link to="/home" className='token--etherlink'>
-                        <i className=''></i>
-                    {/* <div className='tooltip'>LinkSpace</div> */}
-                    </Link>
-                </div>
-                    <Link to="/home" className="nav-link">
-                        <i className="material-symbols--home"></i>
-                    </Link>
+                    <div className="navbar-brand">
+                        <Link to="/home" className='token--etherlink'>
+                            <i className=''></i>
+                            {/* <div className='tooltip'>LinkSpace</div> */}
+                        </Link>
+                    </div>
+                    {!isMobileView &&
+                        <Link to="/home" className="nav-link">
+                            <i className="material-symbols--home"></i>
+                        </Link>
+                    }
                     {/* <Link className="nav-link search-link" onClick={toggleSearch}>
                         <i className="mingcute--search-line"></i>
                     </Link>
@@ -129,7 +131,8 @@ const MyNavbar = () => {
                     </div>
 
                     <Link className="nav-link" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" aria-controls="offcanvasNotifications">
-                        <i className="icon-park-outline--like"></i>
+                        {/* <i className="icon-park-outline--like"></i> */}
+                        <i className="icon-park-twotone--like"></i>
                     </Link>
                     <div className="offcanvas offcanvas-start" data-bs-scroll="true" tabIndex="-1" id="offcanvasNotifications" aria-labelledby="offcanvasNotificationsLabel">
                         <div className="offcanvas-header">
@@ -205,7 +208,7 @@ const MyNavbar = () => {
                     <Link className="nav-link" onClick={handleLogout}>
                         {/* {user ? ( */}
                         <>
-                            <i className="ic--outline-logout" ></i>
+                            <i className="solar--logout-line-duotone " ></i>
                         </>
                         {/* ) : (
                             <>
