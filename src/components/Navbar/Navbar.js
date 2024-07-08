@@ -93,15 +93,17 @@ const MyNavbar = () => {
                     &#9776;
                 </button> */}
                 <div className="navbar-menu">
-                <div className="navbar-brand">
-                    <Link to="/home" className='token--etherlink'>
-                        <i className=''></i>
-                    {/* <div className='tooltip'>LinkSpace</div> */}
-                    </Link>
-                </div>
-                    <Link to="/home" className="nav-link">
-                        <i className="material-symbols--home"></i>
-                    </Link>
+                    <div className="navbar-brand">
+                        <Link to="/home" className='token--etherlink'>
+                            <i className=''></i>
+                            {/* <div className='tooltip'>LinkSpace</div> */}
+                        </Link>
+                    </div>
+                    {!isMobileView &&
+                        <Link to="/home" className="nav-link">
+                            <i className="material-symbols--home"></i>
+                        </Link>
+                    }
                     {/* <Link className="nav-link search-link" onClick={toggleSearch}>
                         <i className="mingcute--search-line"></i>
                     </Link>
