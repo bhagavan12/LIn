@@ -9,6 +9,7 @@
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
+    "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
     "firebase": "^10.12.2",
     "js-cookie": "^3.0.5",
@@ -24,6 +25,8 @@
     "react-scripts": "5.0.1",
     "react-slick": "^0.30.2",
     "slick-carousel": "^1.8.1",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5",
     "web-vitals": "^4.1.1"
   },
   "scripts": {
@@ -31,17 +34,16 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-    
   },
   "eslintConfig": {
-  "extends": [
-    "react-app",
-    "react-app/jest"
-  ],
-  "rules": {
-    "no-unused-vars": "warn"
-  }
-},
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "rules": {
+      "no-unused-vars": "warn"
+    }
+  },
   "browserslist": {
     "production": [
       ">0.2%",

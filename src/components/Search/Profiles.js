@@ -317,6 +317,11 @@ export default function EditButton() {
             navigate(`/userprofile/${user.uid}`, { state: { userData: user } });
         }
     };
+    const handleMsgClick = async (user) => {
+    
+            navigate(`/chat/${user}`);
+    
+    };
     const fetchFriendsDetails = async (friendsList) => {
         try {
             console.log("friendsList:", friendsList); // Debug: log the input list
@@ -365,7 +370,7 @@ export default function EditButton() {
                 <div className='Fstrow_data'>
                     <p id='uname' style={{marginTop:"22px",fontWeight:"bolder"}}>{userData.username}</p>
                     <button type="button" className='pbutton' onClick={() => handleButtonClick(senderid.uid, userId)}>{isFriend ? "Unfollow" : "Send Request"}</button>
-                    <button type="button" className='pbutton' style={{cursor:"not-allowed"}}>Message</button>
+                    <button type="button" className='pbutton' onClick={() => handleMsgClick(userId)}>Message</button>
                     <i className='fluent--share-16-regular' id='iconsett' onClick={handleShowShareModal} style={{ cursor: "pointer" ,width:"2.3em"}}></i>
                     <div style={{ display: 'flex' }}>
 
@@ -416,7 +421,7 @@ export default function EditButton() {
                             <div className='Fstrow_data'>
                                 <p id='uname'>{userData.username}</p>
                                 <button type="button" className='pbutton' onClick={() => handleButtonClick(senderid.uid, userId)}>{isFriend ? "Unfollow" : "Send Request"}</button>
-                                <button type="button" className='pbutton' style={{cursor:"not-allowed"}} >Message</button>
+                                <button type="button" className='pbutton' onClick={() => handleMsgClick(userId)}>Message</button>
                                 <i className='fluent--share-16-regular' id='iconsett' onClick={handleShowShareModal} style={{ cursor: "pointer" }}></i>
                                 <div style={{ display: 'flex' }}>
 

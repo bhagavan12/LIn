@@ -67,15 +67,17 @@ import Search from './components/Search/Search';
 import Profiles from './components/Search/Profiles';
 import Notification from './components/Notifications/Notifications';
 import Home from './components/HomeFeed/Homefeed';
+import Chat from './components/Chat/Chat'
 import Navbar from './components/Navbar/Navbar';
 // import DLogin from './components/Dummy/DLogin';
 import './App.css'; // Import your CSS file for general styles
 import Cookies from 'js-cookie';
+import ChatPage from './components/Chat/ChatPage';
 const AppContent = () => {
-  const { user } = useUserAuth();
+  const { user,userId } = useUserAuth();
   const [yes, setYes] = useState(user);
   useEffect(() => {
-    // const token = Cookies.get('session_token');
+    
     setYes(user);
   }, [user]);
   return (
@@ -101,6 +103,8 @@ const AppContent = () => {
           <Route path='/home' element={<Home />} />
           <Route path="/userprofile/:userId" element={<Profiles />} />
           <Route path="/notifications" element={<Notification />} />
+          <Route path="/chat/:friendUserId" element={<Chat loggedInUserId={userId}/>} />
+          <Route path="/chatpage" element={<ChatPage loggedInUserId={userId}/>} />
         </Routes>
       </div>
     </>

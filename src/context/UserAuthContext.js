@@ -18,7 +18,7 @@ const UserAuthContext = createContext();
 export function UserAuthContextProvider({ children }) {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
-  
+  const [userId,setUserId]=useState(null);
   useEffect(() => {
     const sessionToken = Cookies.get("session_token");
     if (sessionToken) {
@@ -55,6 +55,7 @@ export function UserAuthContextProvider({ children }) {
         const userData = userDocSnapshot.data();
         console.log("Fetched User Data:", userData);
         setUserData(userData);
+        setUserId(userData.uid);
       } else {
         console.log("User document not found for email:", email);
       }
@@ -111,14 +112,15 @@ export function UserAuthContextProvider({ children }) {
   function userDataf() {
     return userData;
   }
-
+  
   const value = {
     user,
     logIn,
     signUp,
     logOut,
     googleSignIn,
-    userDataf
+    userDataf,
+    userId
   };
 
   return (

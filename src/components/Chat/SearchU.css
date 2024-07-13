@@ -1,0 +1,48 @@
+.search-containerch{
+    padding: 20px;
+  }
+  
+  .usernamelabel {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .inputch {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .searchlistch {
+    list-style-type: none;
+    padding: 0;
+    z-index: 1000;
+  }
+  
+  .searched, .chatted-user {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+    transition: background-color .5s;
+  }
+  
+  .searched:hover, .chatted-user:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .profile-imagech {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+  
+  .chatted-users {
+    list-style-type: none;
+    padding: 0;
+  }
+  

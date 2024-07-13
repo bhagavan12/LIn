@@ -8,6 +8,7 @@ import Search from '../Search/Search';
 import { ref, getDownloadURL, listAll } from "firebase/storage";
 import { storage } from "../../firebase";
 import Notifications from '../Notifications/Notifications';
+import ChatPage from '../Chat/ChatPage';
 const MyNavbar = () => {
     const { user, logOut } = useUserAuth();
     // const { userDataf } = useUserAuth();
@@ -169,7 +170,7 @@ const MyNavbar = () => {
                             <Notifications userId={uid}/>
                         </div>
                     </div> */}
-                    <Link to="" className="nav-link" style={{ cursor: "not-allowed" }}>
+                    <Link to="/chatpage" className="nav-link">
                         <i className="fe--messanger"></i>
                     </Link>
                     <Link to="" className="nav-link" style={{ cursor: "not-allowed" }}>
