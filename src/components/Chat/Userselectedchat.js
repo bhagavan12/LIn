@@ -15,7 +15,23 @@ const Chat = ({ loggedInUserId ,friendUserId}) => {
 //   const { friendUserId } = useParams();
   const [profileImageUrl, setProfileImageUrl] = useState(null);
   const [profileImageUrlf, setProfileImageUrlf] = useState(null);
+  useEffect(() => {
+     // Listen for new messages
+     socket.on('message', (message) => {
+      if (
+        (message.user1 === loggedInUserId && message.user2 === friendUserId) ||
+        (message.user1 === friendUserId && message.user2 === loggedInUserId)
+      ) {
+        setMessages((prevMessages) => [...prevMessages, message]);
+      }
+      ele.current.scrollIntoView({ behavior: 'smooth' });
+    });
 
+    // Clean up on component unmount
+    return () => {
+      socket.off('message');
+    };
+  }, [messages]);
   useEffect(() => {
     // Fetch chat history from server using Axios
     const fetchChat = async () => {
@@ -33,21 +49,7 @@ const Chat = ({ loggedInUserId ,friendUserId}) => {
 
     fetchChat();
 
-    // Listen for new messages
-    socket.on('message', (message) => {
-      if (
-        (message.user1 === loggedInUserId && message.user2 === friendUserId) ||
-        (message.user1 === friendUserId && message.user2 === loggedInUserId)
-      ) {
-        setMessages((prevMessages) => [...prevMessages, message]);
-      }
-      ele.current.scrollIntoView({ behavior: 'smooth' });
-    });
-
-    // Clean up on component unmount
-    return () => {
-      socket.off('message');
-    };
+   
   }, [loggedInUserId, friendUserId]);
 
   const getProfileImageUrl = async (userId) => {

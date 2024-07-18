@@ -27,8 +27,8 @@ const Chat = ({ loggedInUserId }) => {
       ) {
          setMessages((prevMessages) => [...prevMessages, message]);
       }
-      console.log(message)
-      // ele.current.textContent=`${message.text}`
+      console.log(message);
+      // ele.current.textContent=`${message.message}`
       // ele.current.style.fontStyle='italic'
       ele.current.scrollIntoView({ behavior: 'smooth' });
     });
