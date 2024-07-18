@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,useRef} from 'react';
 import { io } from 'socket.io-client';
 import axios from 'axios';
 import { ref, getDownloadURL, listAll } from "firebase/storage";
@@ -6,11 +6,12 @@ import { useParams } from "react-router-dom";
 import { storage } from "../../firebase";
 import './Chat.css';
 
-const socket = io('https://chatsocketv2-latest.onrender.com');
+const socket = io('http://localhost:1234');
 
 const Chat = ({ loggedInUserId ,friendUserId}) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const ele = useRef(null);
 //   const { friendUserId } = useParams();
   const [profileImageUrl, setProfileImageUrl] = useState(null);
   const [profileImageUrlf, setProfileImageUrlf] = useState(null);
@@ -19,7 +20,7 @@ const Chat = ({ loggedInUserId ,friendUserId}) => {
     // Fetch chat history from server using Axios
     const fetchChat = async () => {
       try {
-        const response = await axios.get(`https://chatsocketv2-latest.onrender.com/chat/${friendUserId}?loggedInUserId=${loggedInUserId}`);
+        const response = await axios.get(`http://localhost:1234/chat/${friendUserId}?loggedInUserId=${loggedInUserId}`);
         setMessages(response.data.messages);
         const url = await getProfileImageUrl(loggedInUserId);
         setProfileImageUrl(url);
@@ -40,6 +41,7 @@ const Chat = ({ loggedInUserId ,friendUserId}) => {
       ) {
         setMessages((prevMessages) => [...prevMessages, message]);
       }
+      ele.current.scrollIntoView({ behavior: 'smooth' });
     });
 
     // Clean up on component unmount
@@ -88,7 +90,7 @@ const Chat = ({ loggedInUserId ,friendUserId}) => {
     return `${formattedDate} ${formattedTime}`;
   }
   const sendMessage = () => {
-    const msg = { user1: loggedInUserId, user2: friendUserId, sender: loggedInUserId, text: input };
+    const msg = { user1: loggedInUserId, user2: friendUserId, sender: loggedInUserId, message: input };
     socket.emit('message', msg);
     setInput('');
   };
@@ -102,7 +104,7 @@ const Chat = ({ loggedInUserId ,friendUserId}) => {
               <img src={profileImageUrlf} alt="Profile" className="profile-image" />
             )}
             <div className={`msgbox`}>
-              <div className={`message-content ${msg.sender === loggedInUserId ? 'message-right' : 'message-left'}`}>
+              <div ref={ele} className={`message-content ${msg.sender === loggedInUserId ? 'message-right' : 'message-left'}`}>
                 {msg.message}
 
               </div>
