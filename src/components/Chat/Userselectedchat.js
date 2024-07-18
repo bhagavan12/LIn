@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { storage } from "../../firebase";
 import './Chat.css';
 
-const socket = io('http://localhost:1234');
+const socket = io('https://chatsocketv2-latest.onrender.com');
 
 const Chat = ({ loggedInUserId ,friendUserId}) => {
   const [messages, setMessages] = useState([]);
@@ -20,7 +20,7 @@ const Chat = ({ loggedInUserId ,friendUserId}) => {
     // Fetch chat history from server using Axios
     const fetchChat = async () => {
       try {
-        const response = await axios.get(`http://localhost:1234/chat/${friendUserId}?loggedInUserId=${loggedInUserId}`);
+        const response = await axios.get(`https://chatsocketv2-latest.onrender.com/chat/${friendUserId}?loggedInUserId=${loggedInUserId}`);
         setMessages(response.data.messages);
         const url = await getProfileImageUrl(loggedInUserId);
         setProfileImageUrl(url);
