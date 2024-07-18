@@ -44,7 +44,7 @@ const ChatPage = ({ loggedInUserId }) => {
     useEffect(() => {
         const fetchChattedUsers = async () => {
             try {
-                const response = await axios.get(`http://localhost:1234/chats?userId=${loggedInUserId}`);
+                const response = await axios.get(`https://chatsocketv2-latest.onrender.com/chats?userId=${loggedInUserId}`);
                 const userIds = response.data;
                 console.log("chattedUsers1", userIds);
                 // const userIds=chatData
