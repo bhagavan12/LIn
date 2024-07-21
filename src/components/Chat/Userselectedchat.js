@@ -96,7 +96,24 @@ const Chat = ({ loggedInUserId ,friendUserId}) => {
     socket.emit('message', msg);
     setInput('');
   };
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [objToDel,setobjToDel]=useState(null);
+  const [timeofObjd,settimeofObjd]=useState(null);
+  const toggleModal = (obj,time) => {
+    setobjToDel(obj);
+    settimeofObjd(time);
+    setIsModalOpen(!isModalOpen);
+  };
+  
+  const funcDel = async () => {
+    try {
+      await axios.delete(`https://chatsocketv2-latest.onrender.com/chat/${friendUserId}/message/${objToDel}?loggedInUserId=${loggedInUserId}`);
+      setMessages(messages.filter(message => message._id !== objToDel));
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting message:', error);
+    }
+  };
   return (
     <div className="chat-container">
       <div className="message-container">
@@ -106,6 +123,7 @@ const Chat = ({ loggedInUserId ,friendUserId}) => {
               <img src={profileImageUrlf} alt="Profile" className="profile-image" />
             )}
             <div className={`msgbox`}>
+             {(msg.sender === loggedInUserId) ? <i className='ph--dots-three-circle-vertical-light' style={{ margin: "auto 0px" }} onClick={() => toggleModal(msg._id,formatTimestamp(msg.timestamp))}></i> : <i className=''></i>}
               <div ref={ele} className={`message-content ${msg.sender === loggedInUserId ? 'message-right' : 'message-left'}`}>
                 {msg.message}
 
@@ -119,8 +137,26 @@ const Chat = ({ loggedInUserId ,friendUserId}) => {
         <input className='typeinput' value={input} onChange={(e) => setInput(e.target.value)} />
         <button className='cbutton' onClick={sendMessage}>Send</button>
       </div>
+      {isModalOpen && <Modal onClose={toggleModal} onDelete={funcDel} time={timeofObjd}/>}
     </div>
   );
 };
-
+const Modal = ({ onClose, onDelete,time }) => {
+  const handleBackgroundClick = (e) => {
+    if (e.target.classList.contains('modal')) {
+      onClose();
+    }
+  };
+  return (
+    <div className="modal" onClick={handleBackgroundClick}>
+      <div className="modal-content">
+        {/* <span className="close" onClick={onClose}>&times;</span> */}
+        <span style={{padding:"15px"}}>{time}</span>
+        <hr/>
+        
+        <span className="deleteb" onClick={onDelete}>Unsend</span>
+      </div>
+    </div>
+  );
+}
 export default Chat;

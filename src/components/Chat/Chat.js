@@ -13,7 +13,7 @@ const Chat = ({ loggedInUserId }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const { friendUserId } = useParams();
-  const ele = useRef(null)
+  const ele = useRef(null);
   // const [profileImageUrl, setProfileImageUrl] = useState(null);
   const [profileImageUrlf, setProfileImageUrlf] = useState(null);
 
@@ -169,7 +169,7 @@ const Modal = ({ onClose, onDelete,time }) => {
         <span style={{padding:"15px"}}>{time}</span>
         <hr/>
         
-        <span className="deleteb" onClick={onDelete}>Delete</span>
+        <span className="deleteb" onClick={onDelete}>Unsend</span>
       </div>
     </div>
   );
