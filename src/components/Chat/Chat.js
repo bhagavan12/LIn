@@ -16,7 +16,7 @@ const Chat = ({ loggedInUserId }) => {
   const ele = useRef(null)
   // const [profileImageUrl, setProfileImageUrl] = useState(null);
   const [profileImageUrlf, setProfileImageUrlf] = useState(null);
-  
+
   useEffect(() => {
 
     // Listen for new messages
@@ -25,7 +25,7 @@ const Chat = ({ loggedInUserId }) => {
         (message.user1 === loggedInUserId && message.user2 === friendUserId) ||
         (message.user1 === friendUserId && message.user2 === loggedInUserId)
       ) {
-         setMessages((prevMessages) => [...prevMessages, message]);
+        setMessages((prevMessages) => [...prevMessages, message]);
       }
       console.log(message);
       // ele.current.textContent=`${message.message}`
@@ -44,6 +44,7 @@ const Chat = ({ loggedInUserId }) => {
       try {
         const response = await axios.get(`https://chatsocketv2-latest.onrender.com/chat/${friendUserId}?loggedInUserId=${loggedInUserId}`);
         setMessages(response.data.messages);
+        console.log("msgggs:", messages);
         // const url = await getProfileImageUrl(loggedInUserId);
         // setProfileImageUrl(url);
         const urlf = await getProfileImageUrl(friendUserId);
@@ -104,6 +105,24 @@ const Chat = ({ loggedInUserId }) => {
 
     return `${formattedDate} ${formattedTime}`;
   }
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [objToDel,setobjToDel]=useState(null);
+  const [timeofObjd,settimeofObjd]=useState(null);
+  const toggleModal = (obj,time) => {
+    setobjToDel(obj);
+    settimeofObjd(time);
+    setIsModalOpen(!isModalOpen);
+  };
+  
+  const funcDel = async () => {
+    try {
+      await axios.delete(`https://chatsocketv2-latest.onrender.com/chat/${friendUserId}/message/${objToDel}?loggedInUserId=${loggedInUserId}`);
+      setMessages(messages.filter(message => message._id !== objToDel));
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting message:', error);
+    }
+  };
 
   return (
     <div className="chat-container">
@@ -113,25 +132,50 @@ const Chat = ({ loggedInUserId }) => {
             {msg.sender !== loggedInUserId && profileImageUrlf && (
               <img src={profileImageUrlf} alt="Profile" className="profile-image" />
             )}
-            <div className={`msgbox`}>
-              <div ref={ele}  className={`message-content ${msg.sender === loggedInUserId ? 'message-right' : 'message-left'}`}>
-                {msg.message}
-
+            <div style={{ display: "flex" }}>
+              {(msg.sender === loggedInUserId) ? <i className='ph--dots-three-circle-vertical-light' style={{ margin: "auto 0px" }} onClick={() => toggleModal(msg._id,formatTimestamp(msg.timestamp))}></i> : <i className=''></i>}
+              <div className={`msgbox`}>
+                <div ref={ele} className={`message-content ${msg.sender === loggedInUserId ? 'message-right' : 'message-left'}`}>
+                  {msg.message}
+                  
+                </div>
+                <div style={{ fontSize: "small", textAlign: "end" }}>{formatTimestamp(msg.timestamp)}</div>
               </div>
-              <div style={{ fontSize: "small", textAlign: "end" }}>{formatTimestamp(msg.timestamp)}</div>
             </div>
+            
           </div>
+          
         ))}
       </div>
       <div className="input-container">
         <input className='typeinput' value={input} onChange={(e) => setInput(e.target.value)} />
         <button className='cbutton' onClick={sendMessage}>Send</button>
       </div>
+      {isModalOpen && <Modal onClose={toggleModal} onDelete={funcDel} time={timeofObjd}/>}
+      
     </div>
   );
 };
-
+const Modal = ({ onClose, onDelete,time }) => {
+  const handleBackgroundClick = (e) => {
+    if (e.target.classList.contains('modal')) {
+      onClose();
+    }
+  };
+  return (
+    <div className="modal" onClick={handleBackgroundClick}>
+      <div className="modal-content">
+        {/* <span className="close" onClick={onClose}>&times;</span> */}
+        <span style={{padding:"15px"}}>{time}</span>
+        <hr/>
+        
+        <span className="deleteb" onClick={onDelete}>Delete</span>
+      </div>
+    </div>
+  );
+}
 export default Chat;
+
 // import React, { useState, useEffect } from 'react';
 // import { io } from 'socket.io-client';
 // import axios from 'axios';

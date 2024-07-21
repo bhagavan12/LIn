@@ -14,6 +14,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    /* border: 1px solid black; */
   }
   
   .left {
@@ -30,12 +31,12 @@
     padding: 10px 20px;
     border-radius: 20px;
     /* max-width: 60%; */
-    flex-wrap: wrap;
     width: fit-content;
     max-width: 600px;
     /* display: flex; */
     align-items: center;
-    
+    /* border: 1px solid black; */
+    text-align: left;
   }
   
   .message-left {
@@ -44,14 +45,18 @@
   }
   
   .message-right {
+    
+    flex-wrap: wrap;
     text-align: right;
     background-color:rgb(55, 151, 240);
     color: white;
   }
   .msgbox{
+    /* border: 1px solid black; */
     display: flex;
     flex-direction: column;
     
+    /* flex-wrap: wrap; */
   }
   .profile-image {
     width: 40px;
@@ -61,8 +66,12 @@
   }
   
   .input-container {
+    background-color: #fff;
     display: flex;
     padding: 10px;
+    width: 100%;
+    position: sticky;
+    bottom: 0;
     border-top: 1px solid #ccc;
     margin-bottom: 0;
   }
@@ -91,8 +100,75 @@
     }
     .right,.left {
       max-width: 350px;
+      
     }
   .message-content {
     padding: 5px 10px;
+    max-width: 300px;
+    min-width: 100px;
+    text-align: start;
+    /* flex-wrap: wrap; */
   }
+  
+}
+
+  /*modal of 3 dots*/
+  .deleteb{
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #fff;
+    transition: background-color .2s;
+    color: red;
   }
+  .deleteb:hover{
+    background-color:#f5d4d471
+  }
+  .modal {
+    
+    display: flex;
+    position: fixed;
+    z-index: 1;
+    left: 65%;
+    top: 0;
+    width: 20%;
+    height: 100%;
+    overflow: auto;
+    
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    border-radius: 5px;
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 5px;
+    /* border: 1px solid #888; */
+    width: 80%;
+    max-width: 500px;
+  }
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    /* color: black; */
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  @media (max-width:768px){
+    .modal {
+      width: 40%;
+    }
+  }
+  
+  /*modal of 3 dots*/
+  
