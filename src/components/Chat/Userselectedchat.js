@@ -140,18 +140,18 @@ const Chat = ({ loggedInUserId, friendUserId }) => {
         <input className='typeinput' value={input} onChange={(e) => setInput(e.target.value)} />
         <button className='cbutton' onClick={sendMessage}>Send</button>
       </div>
-      {isModalOpen && <Modal onClose={toggleModal} onDelete={funcDel} time={timeofObjd} />}
+      {isModalOpen && <Modal1 onClose={toggleModal} onDelete={funcDel} time={timeofObjd} />}
     </div>
   );
 };
-const Modal = ({ onClose, onDelete, time }) => {
+const Modal1 = ({ onClose, onDelete, time }) => {
   const handleBackgroundClick = (e) => {
     if (e.target.classList.contains('modal')) {
       onClose();
     }
   };
   return (
-    <div className="modal" onClick={handleBackgroundClick}>
+    <div className="modal1" onClick={handleBackgroundClick}>
       <div className="modal-content">
         {/* <span className="close" onClick={onClose}>&times;</span> */}
         <span style={{ padding: "15px" }}>{time}</span>

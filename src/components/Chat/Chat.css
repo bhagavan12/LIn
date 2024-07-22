@@ -123,9 +123,9 @@
     color: red;
   }
   .deleteb:hover{
-    background-color:#f5d4d471
+    background-color:#f5d4d471;
   }
-  .modal {
+  .modal1 {
     
     display: flex;
     position: fixed;
@@ -165,7 +165,7 @@
   }
 
   @media (max-width:768px){
-    .modal {
+    .modal1 {
       width: 40%;
     }
   }
